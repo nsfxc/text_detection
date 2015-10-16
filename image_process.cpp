@@ -1,4 +1,5 @@
 #include "image_process.h"
+#include <cassert>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
 
@@ -7,8 +8,8 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////
 // erotion, dilation, opening and closing processes for binary images
 
-// in place erotion process with the nearest 4 neighbours 
-void erosion(cv::Mat &m, bool erodeEdge, long* counter = 0){
+// in place erotion process with the nearest 8 neighbours 
+void erosion8(cv::Mat &m, bool erodeEdge, long* counter = 0){
 	int c = m.cols, r = m.rows;
 	//assert(m.type() == CV_8UC1 && c > 1 && r > 1);
 	//mark pixels to be removed by changing its value to 127 
@@ -16,7 +17,9 @@ void erosion(cv::Mat &m, bool erodeEdge, long* counter = 0){
 		for (int j = 1; j < c-1; ++j)
 			if ( m.at<uchar>(i, j) == 255 &&
 				(m.at<uchar>(i + 1, j) == 0 || m.at<uchar>(i - 1, j) == 0 ||
-				m.at<uchar>(i, j + 1) == 0 || m.at<uchar>(i, j - 1) == 0) )
+				m.at<uchar>(i, j + 1) == 0 || m.at<uchar>(i, j - 1) == 0 ||
+				m.at<uchar>(i + 1, j + 1) == 0 || m.at<uchar>(i - 1, j + 1) == 0 ||
+				m.at<uchar>(i - 1, j + 1) == 0 || m.at<uchar>(i - 1, j - 1) == 0))
 				m.at<uchar>(i, j) = 127;
 	//process edges
 	if (erodeEdge){
@@ -32,17 +35,279 @@ void erosion(cv::Mat &m, bool erodeEdge, long* counter = 0){
 	else{
 		for (int i = 1; i < r - 1; ++i){
 			if ( m.at<uchar>(i, 0) == 255 && 
-				(m.at<uchar>(i, 1) == 0 || m.at<uchar>(i + 1, 0) == 0 || m.at<uchar>(i - 1, 0) == 0) )
+				(m.at<uchar>(i, 1) == 0 || m.at<uchar>(i + 1, 0) == 0 || m.at<uchar>(i - 1, 0) == 0
+				|| m.at<uchar>(i + 1, 1) == 0 || m.at<uchar>(i - 1, 1) == 0))
 				m.at<uchar>(i, 0) = 127;
 			if ( m.at<uchar>(i, c - 1) == 255 && 
-				(m.at<uchar>(i, c - 2) == 0 || m.at<uchar>(i + 1, c - 1) == 0 || m.at<uchar>(i - 1, c - 1) == 0) )
+				(m.at<uchar>(i, c - 2) == 0 || m.at<uchar>(i + 1, c - 1) == 0 || m.at<uchar>(i - 1, c - 1) == 0
+				|| m.at<uchar>(i + 1, c - 2) == 0 || m.at<uchar>(i - 1, c - 2) == 0))
 				m.at<uchar>(i, c - 1) = 127;
 		}
 		for (int j = 1; j < c - 1; ++j){
 			if ( m.at<uchar>(0, j) == 255 && 
-				(m.at<uchar>(1, j) == 0 || m.at<uchar>(0, j + 1) == 0 || m.at<uchar>(0, j - 1) == 0) )
+				(m.at<uchar>(1, j) == 0 || m.at<uchar>(0, j + 1) == 0 || m.at<uchar>(0, j - 1) == 0
+				|| m.at<uchar>(1, j + 1) == 0 || m.at<uchar>(1, j - 1) == 0))
 				m.at<uchar>(0, j) = 127;
 			if ( m.at<uchar>(r - 1, j) == 255 && 
+				(m.at<uchar>(r - 2, j) == 0 || m.at<uchar>(r - 1, j + 1) == 0 || m.at<uchar>(r - 1, j - 1) == 0
+				|| m.at<uchar>(r - 2, j + 1) == 0 || m.at<uchar>(r - 2, j - 1) == 0))
+				m.at<uchar>(r - 1, j) = 127;
+		}
+		if (m.at<uchar>(0, 0) == 255 && (m.at<uchar>(1, 0) == 0 || m.at<uchar>(0, 1) == 0 || m.at<uchar>(1, 1) == 0))
+			m.at<uchar>(0, 0) = 127;
+		if (m.at<uchar>(0, c - 1) == 255 && (m.at<uchar>(1, c - 1) == 0 || m.at<uchar>(0, c - 2) == 0 || m.at<uchar>(1, c - 2) == 0))
+			m.at<uchar>(0, c - 1) = 127;
+		if (m.at<uchar>(r - 1, 0) == 255 && (m.at<uchar>(r - 2, 0) == 0 || m.at<uchar>(r - 1, 1) == 0 || m.at<uchar>(r - 2, 1) == 0))
+			m.at<uchar>(r - 1, 0) = 127;
+		if (m.at<uchar>(r - 1, c - 1) == 255 && (m.at<uchar>(r - 2, c - 1) == 0 || m.at<uchar>(r - 1, c - 2) == 0 || m.at<uchar>(r - 2, c - 2) == 0))
+			m.at<uchar>(r - 1, c - 1) = 127;
+	}
+	//remove all marked pixels
+	if (counter != 0)
+		for (int i = 0; i < r; ++i){
+			for (int j = 0; j < c; ++j)
+				if (m.at<uchar>(i, j) == 127){
+					m.at<uchar>(i, j) = 0;
+					(*counter)--;
+				}
+		}
+	else
+		for (int i = 0; i < r; ++i)
+			for (int j = 0; j < c; ++j)
+				if (m.at<uchar>(i, j) == 127)
+					m.at<uchar>(i, j) = 0;
+}
+
+// in place dilation process with the nearest 8 neighbours 
+void dilation8(cv::Mat &m, long* counter = 0){
+	int c = m.cols, r = m.rows;
+	//assert(m.type() == CV_8UC1 && c > 1 && r > 1);
+	//mark pixels to be added by changing its value to 127 
+	for (int i = 1; i < r - 1; ++i)
+		for (int j = 1; j < c - 1; ++j)
+			if (m.at<uchar>(i, j) == 255){
+				if (m.at<uchar>(i + 1, j) == 0)
+					m.at<uchar>(i + 1, j) = 127;
+				if (m.at<uchar>(i - 1, j) == 0)
+					m.at<uchar>(i - 1, j) = 127;
+				if (m.at<uchar>(i, j + 1) == 0)
+					m.at<uchar>(i, j + 1) = 127;
+				if (m.at<uchar>(i, j - 1) == 0)
+					m.at<uchar>(i, j - 1) = 127;
+				if (m.at<uchar>(i + 1, j + 1) == 0)
+					m.at<uchar>(i + 1, j + 1) = 127;
+				if (m.at<uchar>(i - 1, j + 1) == 0)
+					m.at<uchar>(i - 1, j + 1) = 127;
+				if (m.at<uchar>(i - 1, j + 1) == 0)
+					m.at<uchar>(i - 1, j + 1) = 127;
+				if (m.at<uchar>(i - 1, j - 1) == 0)
+					m.at<uchar>(i - 1, j - 1) = 127;
+			}
+	//process edges
+	for (int i = 1; i < r - 1; ++i){
+		if (m.at<uchar>(i, 0) == 255){
+			if (m.at<uchar>(i + 1, 0) == 0)
+				m.at<uchar>(i + 1, 0) = 127;
+			if (m.at<uchar>(i - 1, 0) == 0)
+				m.at<uchar>(i - 1, 0) = 127;
+			if (m.at<uchar>(i, 1) == 0)
+				m.at<uchar>(i, 1) = 127;
+			if (m.at<uchar>(i + 1, 1) == 0)
+				m.at<uchar>(i + 1, 1) = 127;
+			if (m.at<uchar>(i - 1, 1) == 0)
+				m.at<uchar>(i - 1, 1) = 127;
+		}
+		if (m.at<uchar>(i, c - 1) == 255){
+			if (m.at<uchar>(i + 1, c - 1) == 0)
+				m.at<uchar>(i + 1, c - 1) = 127;
+			if (m.at<uchar>(i - 1, c - 1) == 0)
+				m.at<uchar>(i - 1, c - 1) = 127;
+			if (m.at<uchar>(i, c - 2) == 0)
+				m.at<uchar>(i, c - 2) = 127;
+			if (m.at<uchar>(i + 1, c - 2) == 0)
+				m.at<uchar>(i + 1, c - 2) = 127;
+			if (m.at<uchar>(i - 1, c - 2) == 0)
+				m.at<uchar>(i - 1, c - 2) = 127;
+		}
+	}
+	for (int j = 1; j < c - 1; ++j){
+		if (m.at<uchar>(0, j) == 255){
+			if (m.at<uchar>(1, j) == 0)
+				m.at<uchar>(1, j) = 127;
+			if (m.at<uchar>(0, j + 1) == 0)
+				m.at<uchar>(0, j + 1) = 127;
+			if (m.at<uchar>(0, j - 1) == 0)
+				m.at<uchar>(0, j - 1) = 127; 
+			if (m.at<uchar>(1, j + 1) == 0)
+				m.at<uchar>(1, j + 1) = 127;
+			if (m.at<uchar>(1, j - 1) == 0)
+				m.at<uchar>(1, j - 1) = 127;
+		}
+		if (m.at<uchar>(r - 1, j) == 255){
+			if (m.at<uchar>(r - 2, j) == 0)
+				m.at<uchar>(r - 2, j) = 127;
+			if (m.at<uchar>(r - 1, j + 1) == 0)
+				m.at<uchar>(r - 1, j + 1) = 127;
+			if (m.at<uchar>(r - 1, j - 1) == 0)
+				m.at<uchar>(r - 1, j - 1) = 127;
+			if (m.at<uchar>(r - 2, j + 1) == 0)
+				m.at<uchar>(r - 2, j + 1) = 127;
+			if (m.at<uchar>(r - 2, j - 1) == 0)
+				m.at<uchar>(r - 2, j - 1) = 127;
+		}
+	}
+	if (m.at<uchar>(0, 0) == 255){
+		if (m.at<uchar>(1, 0) == 0)
+			m.at<uchar>(1, 0) = 127;
+		if (m.at<uchar>(0, 1) == 0)
+			m.at<uchar>(0, 1) = 127;
+		if (m.at<uchar>(1, 1) == 0)
+			m.at<uchar>(1, 1) = 127;
+	}
+	if (m.at<uchar>(0, c - 1) == 255){
+		if (m.at<uchar>(1, c - 1) == 0)
+			m.at<uchar>(1, c - 1) = 127;
+		if (m.at<uchar>(0, c - 2) == 0)
+			m.at<uchar>(0, c - 2) = 127;
+		if (m.at<uchar>(1, c - 2) == 0)
+			m.at<uchar>(1, c - 2) = 127;
+	}
+	if (m.at<uchar>(r - 1, c - 1) == 255){
+		if (m.at<uchar>(r - 2, c - 1) == 0)
+			m.at<uchar>(r - 2, c - 1) = 127;
+		if (m.at<uchar>(r - 1, c - 2) == 0)
+			m.at<uchar>(r - 1, c - 2) = 127;
+		if (m.at<uchar>(r - 2, c - 2) == 0)
+			m.at<uchar>(r - 2, c - 2) = 127;
+	}
+	if (m.at<uchar>(r - 1, 0) == 255){
+		if (m.at<uchar>(r - 2, 0) == 0)
+			m.at<uchar>(r - 2, 0) = 127;
+		if (m.at<uchar>(r - 1, 1) == 0)
+			m.at<uchar>(r - 1, 1) = 127;
+		if (m.at<uchar>(r - 2, 1) == 0)
+			m.at<uchar>(r - 2, 1) = 127;
+	}
+	//add all marked pixels
+	if (counter != 0){
+		for (int i = 0; i < r; ++i)
+			for (int j = 0; j < c; ++j)
+				if (m.at<uchar>(i, j) == 127){
+					m.at<uchar>(i, j) = 255;
+					(*counter)--;
+				}
+	}
+	else
+		for (int i = 0; i < r; ++i)
+			for (int j = 0; j < c; ++j)
+				if (m.at<uchar>(i, j) == 127)
+					m.at<uchar>(i, j) = 255;
+}
+
+// in place opening process with the nearest 8 neighbours 
+void opening8(cv::Mat &m, int layer, bool erodeEdge){
+	int c = m.cols, r = m.rows;
+	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
+	for (int i = 0; i < layer; ++i)
+		erosion8(m, erodeEdge);
+	for (int i = 0; i < layer; ++i)
+		dilation8(m);
+}
+void opening8(cv::Mat &m, double percentage, bool erodeEdge){
+	//initialization, check for appropriate input
+	int c = m.cols, r = m.rows, layer = 0;
+	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
+	if (percentage <= 0.)
+		return;
+	if (percentage >= 100.){
+		for (int i = 0; i < r; ++i)
+			for (int j = 0; j < c; ++j)
+				m.at<uchar>(i, j) = 0;
+		return;
+	}
+	long pixel = 0;
+	//count pixels and get the number of pixels to be removed
+	for (int i = 0; i < r; ++i)
+		for (int j = 0; j < c; ++j)
+			if (m.at<uchar>(i, j) == 255)
+				++pixel;
+	pixel = long(pixel * percentage / 100);
+	//erode while pixel > 0
+	while (pixel > 0){
+		erosion8(m, erodeEdge, &pixel);
+		++layer;
+	}
+	for (int i = 0; i < layer; ++i)
+		dilation8(m);
+}
+
+// in place closing process with the nearest 8 neighbours 
+void closing8(cv::Mat &m, int layer, bool erodeEdge){
+	int c = m.cols, r = m.rows;
+	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
+	for (int i = 0; i < layer; ++i)
+		dilation8(m);
+	for (int i = 0; i < layer; ++i)
+		erosion8(m, erodeEdge);
+}
+void closing8(cv::Mat &m, double percentage, bool erodeEdge){
+	//initialization, check for appropriate input
+	int c = m.cols, r = m.rows, layer = 0;
+	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
+	if (percentage <= 0.)
+		return;
+	long pixel = 0;
+	//count pixels and get the number of pixels to be removed
+	for (int i = 0; i < r; ++i)
+		for (int j = 0; j < c; ++j)
+			if (m.at<uchar>(i, j) == 255)
+				++pixel;
+	pixel = long(pixel * percentage / 100);
+	//erode while pixel > 0
+	while (pixel > 0){
+		dilation8(m, &pixel);
+		++layer;
+	}
+	for (int i = 0; i < layer; ++i)
+		erosion8(m, erodeEdge);
+}
+
+// in place erotion process with the nearest 4 neighbours 
+void erosion4(cv::Mat &m, bool erodeEdge, long* counter = 0){
+	int c = m.cols, r = m.rows;
+	//assert(m.type() == CV_8UC1 && c > 1 && r > 1);
+	//mark pixels to be removed by changing its value to 127 
+	for (int i = 1; i < r - 1; ++i)
+		for (int j = 1; j < c - 1; ++j)
+			if (m.at<uchar>(i, j) == 255 &&
+				(m.at<uchar>(i + 1, j) == 0 || m.at<uchar>(i - 1, j) == 0 ||
+				m.at<uchar>(i, j + 1) == 0 || m.at<uchar>(i, j - 1) == 0))
+				m.at<uchar>(i, j) = 127;
+	//process edges
+	if (erodeEdge){
+		for (int i = 0; i < r; ++i){
+			m.at<uchar>(i, 0) = 0;
+			m.at<uchar>(i, c - 1) = 0;
+		}
+		for (int j = 1; j < c - 1; ++j){
+			m.at<uchar>(0, j) = 0;
+			m.at<uchar>(r - 1, j) = 0;
+		}
+	}
+	else{
+		for (int i = 1; i < r - 1; ++i){
+			if (m.at<uchar>(i, 0) == 255 &&
+				(m.at<uchar>(i, 1) == 0 || m.at<uchar>(i + 1, 0) == 0 || m.at<uchar>(i - 1, 0) == 0))
+				m.at<uchar>(i, 0) = 127;
+			if (m.at<uchar>(i, c - 1) == 255 &&
+				(m.at<uchar>(i, c - 2) == 0 || m.at<uchar>(i + 1, c - 1) == 0 || m.at<uchar>(i - 1, c - 1) == 0))
+				m.at<uchar>(i, c - 1) = 127;
+		}
+		for (int j = 1; j < c - 1; ++j){
+			if (m.at<uchar>(0, j) == 255 &&
+				(m.at<uchar>(1, j) == 0 || m.at<uchar>(0, j + 1) == 0 || m.at<uchar>(0, j - 1) == 0))
+				m.at<uchar>(0, j) = 127;
+			if (m.at<uchar>(r - 1, j) == 255 &&
 				(m.at<uchar>(r - 2, j) == 0 || m.at<uchar>(r - 1, j + 1) == 0 || m.at<uchar>(r - 1, j - 1) == 0))
 				m.at<uchar>(r - 1, j) = 127;
 		}
@@ -72,7 +337,7 @@ void erosion(cv::Mat &m, bool erodeEdge, long* counter = 0){
 }
 
 // in place dilation process with the nearest 4 neighbours 
-void dilation(cv::Mat &m, long* counter = 0){
+void dilation4(cv::Mat &m, long* counter = 0){
 	int c = m.cols, r = m.rows;
 	//assert(m.type() == CV_8UC1 && c > 1 && r > 1);
 	//mark pixels to be added by changing its value to 127 
@@ -114,7 +379,7 @@ void dilation(cv::Mat &m, long* counter = 0){
 			if (m.at<uchar>(0, j + 1) == 0)
 				m.at<uchar>(0, j + 1) = 127;
 			if (m.at<uchar>(0, j - 1) == 0)
-				m.at<uchar>(0, j - 1) = 127; 
+				m.at<uchar>(0, j - 1) = 127;
 		}
 		if (m.at<uchar>(r - 1, j) == 255){
 			if (m.at<uchar>(r - 2, j) == 0)
@@ -166,16 +431,16 @@ void dilation(cv::Mat &m, long* counter = 0){
 }
 
 // in place opening process with the nearest 4 neighbours 
-void opening(cv::Mat &m, int layer, bool erodeEdge){
+void opening4(cv::Mat &m, int layer, bool erodeEdge){
 	int c = m.cols, r = m.rows;
 	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
 
 	for (int i = 0; i < layer; ++i)
-		erosion(m, erodeEdge);
+		erosion4(m, erodeEdge);
 	for (int i = 0; i < layer; ++i)
-		dilation(m);
+		dilation4(m);
 }
-void opening(cv::Mat &m, double percentage, bool erodeEdge){
+void opening4(cv::Mat &m, double percentage, bool erodeEdge){
 	//initialization, check for appropriate input
 	int c = m.cols, r = m.rows, layer = 0;
 	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
@@ -197,24 +462,24 @@ void opening(cv::Mat &m, double percentage, bool erodeEdge){
 	pixel = long(pixel * percentage / 100);
 	//erode while pixel > 0
 	while (pixel > 0){
-		erosion(m, erodeEdge, &pixel);
+		erosion4(m, erodeEdge, &pixel);
 		++layer;
 	}
 	for (int i = 0; i < layer; ++i)
-		dilation(m);
+		dilation4(m);
 }
 
 // in place closing process with the nearest 4 neighbours 
-void closing(cv::Mat &m, int layer, bool erodeEdge){
+void closing4(cv::Mat &m, int layer, bool erodeEdge){
 	int c = m.cols, r = m.rows;
 	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
 
 	for (int i = 0; i < layer; ++i)
-		dilation(m);
+		dilation4(m);
 	for (int i = 0; i < layer; ++i)
-		erosion(m, erodeEdge);
+		erosion4(m, erodeEdge);
 }
-void closing(cv::Mat &m, double percentage, bool erodeEdge){
+void closing4(cv::Mat &m, double percentage, bool erodeEdge){
 	//initialization, check for appropriate input
 	int c = m.cols, r = m.rows, layer = 0;
 	assert(m.type() == CV_8UC1 && c > 1 && r > 1);
@@ -230,11 +495,11 @@ void closing(cv::Mat &m, double percentage, bool erodeEdge){
 	pixel = long(pixel * percentage / 100);
 	//erode while pixel > 0
 	while (pixel > 0){
-		dilation(m, &pixel);
+		dilation4(m, &pixel);
 		++layer;
 	}
 	for (int i = 0; i < layer; ++i)
-		erosion(m, erodeEdge);
+		erosion4(m, erodeEdge);
 }
 
 /////////////////////////////////////////////////////////////////////

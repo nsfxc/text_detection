@@ -6,5 +6,5 @@ FIND_PACKAGE(OpenCV REQUIRED)
 PROJECT(TextDetection)
 
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
-ADD_EXECUTABLE(main main.cpp Image.cpp Pixel.cpp kmeans.cpp kmeans.h image_process.cpp)
+ADD_EXECUTABLE(main main.cpp Image.cpp Image.h Pixel.cpp Pixel.h kmeans.cpp kmeans.h image_process.cpp image_process.h)
 TARGET_LINK_LIBRARIES(main ${OpenCV_LIBS})
