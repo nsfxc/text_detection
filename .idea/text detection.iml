@@ -7,6 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/Image.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pixel.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Pixel.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/image_process.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/image_process.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/kmeans.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/kmeans.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
