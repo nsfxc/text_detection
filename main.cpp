@@ -6,10 +6,10 @@
 
 //for seperate adjustment of parameters
 void test_opening(){
-	Mat result = imread("../test_images/test4_raw.jpg"), tmp;
+	Mat result = imread("../test_images/fruits_raw.jpg"), tmp;
 	cvtColor(result, result, CV_BGR2GRAY);
 	toBinary(result);
-	cvtColor(imread("../test_images/test4.jpg"), tmp, CV_BGR2GRAY);
+	cvtColor(imread("../test_images/fruits.jpg"), tmp, CV_BGR2GRAY);
 	imshow("original-grey",tmp);
 	imshow("original-result", result);
 	closing4(result,200.);
@@ -22,10 +22,11 @@ void test_opening(){
 int main() {
 	//for seperate adjustment of parameters
 	//test_opening();
+	//cout << (((uchar)0)^0xFF) << endl;
 	//return 0;
 
     //test of input and sobel
-    Mat test = imread("../test_images/test9.jpg");
+    Mat test = imread("../test_images/fruits.jpg");
     Mat Ix = XSobel(test);;
     Mat Iy = YSobel(test);
     Mat Ixy = XYSobel(test);
@@ -40,14 +41,14 @@ int main() {
     I[3] = Image(Iyx,5,5);
     Mat result = kmeans(2,4,I),tmp;
 	cvtColor(test, tmp, CV_BGR2GRAY);
-	//toBinary(result);
+	//inverseBinary(result);
     showImage(result);
-	imwrite("../test_images/test9_raw.jpg", result);
+	imwrite("../test_images/fruits_raw.jpg", result);
 	closing4(result, 200.);
 	opening8(result, 40., false);
 	showImage(result);
 	diaphragm(tmp, result);
 	showImage(tmp);
-	imwrite("../test_images/test9_result.jpg", tmp);
+	imwrite("../test_images/fruits_result.jpg", tmp);
     return 0;
 }

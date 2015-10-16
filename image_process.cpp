@@ -580,3 +580,17 @@ void diaphragm(cv::Mat &m, const cv::Mat &d){
 }
 
 /////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+//binary inverse
+//the following function assume inputs of same size and type CV_8UC1 and binary diaphragm
+
+// in place inverse binary image
+void inverseBinary(cv::Mat &m){
+	assert(m.type() == CV_8UC1);
+	for (int i = 0; i < m.rows; ++i)
+		for (int j = 0; j < m.cols; ++j)
+				m.at<uchar>(i, j) ^= 0xFF;
+}
+
+/////////////////////////////////////////////////////////////////////
