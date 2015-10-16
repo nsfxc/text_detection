@@ -8,7 +8,7 @@
 #include <vector>
 using namespace std;
 
-const int iter = 2;
+const int iter = 10;
 Mat kmeans(int nbcentre,int nbi,Image *I);
 
 #endif //TEXTDETECTION_KMEANS_H

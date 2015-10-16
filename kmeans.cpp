@@ -3,7 +3,7 @@
 //
 
 #include "kmeans.h"
-#include<iostream>
+
 int findCenter(int x, int y, int nbcenter, int nbi,Pixel **centers,Image *I) {
     int closed = 0;
     float min_dis = 0;
@@ -62,5 +62,8 @@ Mat kmeans(int nbcenter,int nbi, Image *I){
             updateCenter(center,nbi,centers,I,result);
         }
     }
+    foreachPixel(x,y,r,c){
+            result.at<uchar>(x,y) = (uchar)((int)result.at<uchar>(x,y) * (255.0/(float)(nbcenter-1)));
+        }
     return  result;
 };
