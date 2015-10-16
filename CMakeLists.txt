@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 SET(OpenCV_STATIC OFF)
 FIND_PACKAGE(OpenCV REQUIRED)
+INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 
 PROJECT(TextDetection)
 
-INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
-ADD_EXECUTABLE(main main.cpp Image.cpp Pixel.cpp kmeans.cpp kmeans.h)
-TARGET_LINK_LIBRARIES(main ${OpenCV_LIBS})
+ADD_EXECUTABLE(TextDetection main.cpp Image.cpp Image.h Pixel.cpp Pixel.h kmeans.cpp kmeans.h image_process.h image_process.cpp)
+TARGET_LINK_LIBRARIES(TextDetection ${OpenCV_LIBS})
