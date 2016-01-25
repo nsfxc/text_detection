@@ -22,18 +22,57 @@ def backwards(nn_weights, layers, X, y, num_labels, lambd):
     # nn_params and need to be converted back into the weight matrices.
     Theta = roll_params(nn_weights, layers)
   
+    # You need to return the following variables correctly 
     Theta_grad = [zeros(w.shape) for w in Theta]
 
-    # ================================ TODO ================================
     # The vector y passed into the function is a vector of labels
     # containing values from 1..K. You need to map this vector into a 
     # binary vector of 1's and 0's to be used with the neural network
     # cost function.
     yv = zeros((num_labels, m))
+    for i in range(m):
+	yv[y[i],i] = 1
 
-    # ================================ TODO ================================
     # In this point implement the backpropagaition algorithm 
+    A = []
+    a = ones(X.shape[0])
+    a = vstack((a,X.transpose()))
+    Z = []
+    Z.append(a)
+    for i in range(num_layers-1):
+        A.append(a.transpose())
+	z = dot(Theta[i],a)
+	Z.append(z)
+	a = sigmoid(z)
+	if i != num_layers-2:
+	    a = vstack((ones(a.shape[1]),a))  
+  
+    # A: list of result after each layer
+    A.append(a.transpose())
+    h = a.transpose()
+
+    # delta for the last layer
+    delta = h - yv.transpose()
+    # calculate of gradients
+    for j in range(num_layers-2,0,-1):
+	Theta_grad[j] = Theta_grad[j] + dot(delta.transpose(),A[j])
+	# calculate of delta for current layer(have to remove the first column of Theta)
+	tmp = dot(Theta[j][:,1:].transpose(),delta.transpose())
+	tmp = tmp.transpose()
+	tmp_matrix = zeros(tmp.shape)
+	for i in range(m):
+	    tmp_matrix[i] = sigmoidGradient(Z[j].transpose()[i])
+	delta = tmp_matrix * tmp
+    Theta_grad[0] = Theta_grad[0] + dot(delta.transpose(),A[0])
+
     
+    # regularization
+    for i in range(num_layers-1):
+	for j in range((Theta_grad[i].shape)[0]):
+	    for k in range((Theta_grad[i].shape)[1]):
+		Theta_grad[i][j,k] = Theta_grad[i][j,k]/m
+		if k >=1:
+			Theta_grad[i][j,k] = Theta_grad[i][j,k] + lambd/m*Theta[i][j,k]
     # Unroll Params
     Theta_grad = unroll_params(Theta_grad)
 

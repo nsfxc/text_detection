@@ -20,32 +20,40 @@ def costFunction(nn_weights, layers, X, y, num_labels, lambd):
     # Unroll Params
     Theta = roll_params(nn_weights, layers)
     
-    J = 0;
-    
+    # The vector y passed into the function is a vector of labels
+    # containing values from 1..K. You need to map this vector into a 
+    # binary vector of 1's and 0's to be used with the neural network
+    # cost function.
     yv = zeros((num_labels, m))
     for i in range(m):
-	yv[i,y[i]] = 1
+	yv[y[i],i] = 1
 
-    a = np.ones(X.shape[1])
-    a = np.vstack(a1,X)
-    a = a.transpose()
-    for i in range(num_layer-1):
-	z = Theta(i)
+    # In this point calculate the cost of the neural network (feedforward)
+    # a: the result obtained after each layer
+    a = ones(X.shape[0])
+    a = vstack((a,X.transpose()))
+    for i in range(num_layers-1):
+	z = dot(Theta[i],a)
 	a = sigmoid(z)
+	if i != num_layers-2:
+	    a = vstack((ones(a.shape[1]),a))
+    #h: final result
     h = a.transpose()
+	
+    #calculate of the cost J
+    J = 0
     for i in range(m):
-	for k in range(num_lables):
-	   J = J + (-yv(i,k) * np.log(h[i])[k] - (1-y) * np.log(1.0 - h[i])[k])
+	for k in range(num_labels):
+	   J = J + (-yv[k,i] * log(h[i][k]) - (1-yv[k,i]) * log(1.0 - h[i][k]))
     J = J/m;
-
-    tmp = 1
-    for i in range(num_layer-1):
-        sum = 0
+    
+    #regularization
+    tmp = 0
+    for i in range(num_layers-1):
     	for j in range(Theta[i].shape[0]):
-	    for k in range(Theta[i].shape[1]):
-		sum = sum + Theta[i][j][k] * Theta[i][j][k]
-	tmp = tmp * sum
-    J = J + tmp * lambd/(2*m) 
+	    for k in range(1,Theta[i].shape[1]):
+		tmp = tmp + Theta[i][j][k] * Theta[i][j][k]
+    J = J + tmp * lambd/(2.0*m) 
     
     return J
 
