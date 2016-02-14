@@ -1,0 +1,67 @@
+%---------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%--------------------------------------------------------------
+\documentclass[paper=a4, french, 11pt]{scrartcl} 
+
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} 
+\usepackage[francais]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{sectsty} % Allows customizing section commands
+\usepackage{fancyhdr} % Custom headers and footers
+
+
+\allsectionsfont{\centering \normalfont\scshape} 
+
+\sectionfont{\normalfont\scshape}
+\subsectionfont{\normalfont\scshape}
+\subsubsectionfont{\normalfont\scshape}
+
+\pagestyle{fancyplain} 
+\fancyhead{} 
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+\setlength\parindent{0pt} 
+
+\definecolor{bg}{RGB}{235,235,235}
+\definecolor{bk}{RGB}{135,135,135}
+\newcommand{\class}[1]{\colorbox{bg}
+{\textcolor{red}{\usefont{OT1}{cmtt}{m}{n}#1}}}
+\newcommand{\cmd}[1]{\colorbox{bk}{\textcolor{white}
+{\usefont{OT1}{cmtt}{m}{n}#1}}}
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+
+%-----------------------------------------------------------
+%	TITLE SECTION
+%-----------------------------------------------------------
+
+\title{	
+\normalfont \normalsize 
+\textsc{Projet INF582} \\ [25pt] 
+\horrule{0.5pt} \\[0.5cm] % Thin top horizontal rule
+\huge Text detection \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Zhixing CAO, Yuesong SHEN} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\setlength\parindent{12pt}
+\maketitle % Print the title
+
+\section{Introduction}
+\subsection{Text detection}
+The development of smartphones and the growing demands in content-based image understanding has made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text.  
+
+\end{document}
