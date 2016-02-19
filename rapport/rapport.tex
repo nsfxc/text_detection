@@ -61,9 +61,9 @@
 \maketitle % Print the title
 
 \section{Introduction}
-\subsection{Text detection}
-The development of smartphones and the growing demands in content-based image understanding has made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text.  
+The development of smartphones and the growing demands in content-based image understanding has made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text.  
 
+\subsection{Text detection}
 As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem have been studied a lot in recent researches and numerous methods are reported in the literature.
 
 All the methods used in recent research can be classified into two catagories: method based on texture and method based on connected componet.
@@ -73,7 +73,9 @@ Texture-based method views texts as a special texture that is distinguish from i
 Different with the texture-based method, the connected component based approach extrats regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen and al extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
 
 \subsection{Text recognition}
+Converting text data from image and deciphering into digits is an important problem. Early physical photocell-based OCR implemented matrix matching by comparing an image to a stored glyph on a pixel-by-pixel based. Those algorithms involve mostly extensive processing on the image such as thinning, smoothing contour analysis etc. because the majority of previous works uses geometrial and topological features. In recent research community the dominant approach to this problem is based on machine learning techniques --- a general inductive process builds automatically a classifier by learning.
 
+In the textbook \textit{Pattern Recognition and Machine Learning}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in patter recognition. The early effort has been made around 1986s by Burr, Mehr\&Richfield to implement a neural networks in character recognition. Recently, with the development of paralel computation and the use of GPU, efficiant OCR system based on neural network is realized. 
 
 \subsection{Our approach}
 In this report, we show you our approach of the text detection problem by combined texture-based method and connected component based method and our text recognition algorithm using neural network. 
@@ -82,5 +84,19 @@ We adapte at first the method proposed by Liu and al to locate texts. This algor
 
 After locating the text, a connected component based method is used to extract word candidates. We find all components by using connected-component labeling algorithm. Then we use some geometric constraints and heuristic rules to merge them and extract letters and words candidates.  
 
-Our approach for text recognition based on 
+Our approach for text recognition is based on using neural network to classify characters. With a training set of different kind of characters, the neural network is constructed in order to match an input character to a learned one. 
+
+\section{Text detection}
+\subsection{Detecton of contour}
+\subsection{K-means classification}
+\subsection{Text area identification}
+\subsection{Connected components detection}
+\subsection{detection of words}
+
+\section{Text recognition}
+\subsection{Neural network}
+\subsection{Pattern Recognition}
+
+\section{Conclusion}
+
 \end{document}
