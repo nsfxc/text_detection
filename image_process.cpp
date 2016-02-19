@@ -4,6 +4,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace cv;
 
 /////////////////////////////////////////////////////////////////////
 // erotion, dilation, opening and closing processes for binary images
@@ -594,3 +595,66 @@ void inverseBinary(cv::Mat &m){
 }
 
 /////////////////////////////////////////////////////////////////////
+struct blob{
+	int x1, x2, y1, y2;
+	int size, index;
+	int centrex,centrey;
+};
+
+int distance(int x1, int y1, int x2, int y2){
+	return (x1 - x2)* (x1 - x2) + (y1 - y2) * (y1 - y2);
+}
+
+/////////////////////////////////////////////////////////////////////
+//find all connected composant of a binary image
+
+void FindBlobs(const Mat &img, Mat &components)
+{
+	Mat binary = (img < 128);
+	Mat labelImage(binary.size(),CV_32S);
+
+	int nLabels = connectedComponents(binary,labelImage,8);
+	vector<blob> blobs(nLabels);
+	for(int i = 0; i < nLabels; i++) {
+		blobs[i].x1 = -1;
+		blobs[i].y1 = -1;
+		blobs[i].x2 = -1;
+		blobs[i].y2 = -1;
+		blobs[i].size = 0;
+		blobs[i].centrex = 0;
+		blobs[i].centrey = 0;
+		blobs[i].index = -1;
+	}
+	for(int x = 0; x < binary.rows; x++){
+		for(int y = 0; y < binary.cols; y++){
+			int index = labelImage.at<int>(x,y);
+			blobs[index].x1 = (blobs[index].x1 == -1 || x < blobs[index].x1)?x:blobs[index].x1;
+			blobs[index].y1 = (blobs[index].y1 == -1 || y < blobs[index].y1)?y:blobs[index].y1;
+			blobs[index].x2 = (blobs[index].x2 == -1 || x > blobs[index].x2)?x:blobs[index].x2;
+			blobs[index].y2 = (blobs[index].y2 == -1 || y > blobs[index].y2)?y:blobs[index].y2;
+			blobs[index].size++;
+			blobs[index].centrex += x;
+			blobs[index].centrey += y;
+		}
+	}
+	for (int i = 0; i < nLabels; i++){
+		blobs[i].centrex = blobs[i].centrex/blobs[i].size;
+		blobs[i].centrex = blobs[i].centrex/blobs[i].size;
+	}
+	int k = 0;
+	for(int i = 0; i < nLabels; i++){
+		if (blobs[i].index== -1) {
+			blobs[i].index = k;
+			k++;
+		}
+		for(int j = i+1; j < nLabels; j++){
+			if (distance(blobs[i].centrex,blobs[i].centrey,blobs[j].centrex, blobs[j].centrey) < 9)
+				blobs[j].index = blobs[i].index;
+		}
+	}
+	for (int i = 0; i < img.rows; i++){
+		for(int j = 0; j < img.cols; j++){
+			components.at<int>(i,j) = blobs[labelImage.at<int>(i,j)].index;
+		}
+	}
+}

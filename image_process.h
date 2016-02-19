@@ -58,4 +58,6 @@ void inverseBinary(cv::Mat &m);
 
 /////////////////////////////////////////////////////////////////////
 
+void FindBlobs(const cv::Mat &binary, std::vector <std::vector<cv::Vec3b> > blobs);
+
 #endif
