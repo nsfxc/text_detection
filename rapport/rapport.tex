@@ -70,8 +70,14 @@ The approach of our project can be divided into two parts --- text detection and
 
 \subsection{Work breakdown}
 The whole project is carried out by Zhixing CAO and Yuesong SHEN. Several works have been carried out independently during the project. Here is the overview of work breakdown.\
-\begin{figure}
-	\includegraphics[width=0.7\paperwidth]{breakdowns.png}
+\begin{figure}[h]
+\begin{center}
+	\vspace{-3ex}
+   \includegraphics[width=0.75\linewidth]{breakdowns.png}
+\end{center}
+\vspace{-4ex}
+\caption{Work breakdown}
+\label{fig:heatmap}
 \end{figure}
  
 \section{State of the art}
@@ -118,6 +124,23 @@ The result obtained by k-means algoritm needs to be polished to remove noise and
 
 \section{Text recognition}
 \subsection{Neural network}
+In machine learning, neural network is a powerful tool to estimate functions that maps input to output. Theoretically, it can approximate every non-linear functions when using non-linear activation function. 
+
+Inspired of humans' central nervous systems, neural network uses connected nodes, known as neurons, to imitate the nervous system. A neural network is a complex adaptive system with ability to \textit{learn}. It consists of multiple layers. Apart from the input layer, all layers have an activation function. By adjusting this function according to our given datas, known as training set, the network achieve to learn and understand these datas. Here is the structure of the neural network:
+
+\begin{figure}[h]
+\begin{center}
+	\vspace{-3ex}
+   \includegraphics[width=0.75\linewidth]{network.png}
+\end{center}
+\vspace{-4ex}
+\caption{Structure of neural network}
+\label{fig:heatmap}
+\end{figure}
+
+Our goal is to determine the activation function $\Theta$ by using gradient decent. At first, we need to set $\Theta$ to some random values in order to break the symmetry. Then, the forward propagation will determine the output while the backpropagation will correct the error.
+
+In our project, we use neural network to learn digital numbers and letters. With a well-chosen sample data set of numbers and letters, our neural network is able to recognize image formed text.
 \subsection{Pattern Recognition}
 
 \section{Conclusion}
