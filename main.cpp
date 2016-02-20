@@ -19,14 +19,16 @@ void test_opening(){
 	showImage(tmp);
 }
 
+
 int main() {
 	//for seperate adjustment of parameters
 	//test_opening();
 	//cout << (((uchar)0)^0xFF) << endl;
 	//return 0;
 
+
     //test of input and sobel
-    Mat test = imread("../test_images/fruits.jpg");
+    Mat test = imread("../test_images/test2.jpg");
     Mat Ix = XSobel(test);;
     Mat Iy = YSobel(test);
     Mat Ixy = XYSobel(test);
@@ -43,12 +45,12 @@ int main() {
 	cvtColor(test, tmp, CV_BGR2GRAY);
 	//inverseBinary(result);
     showImage(result);
-	imwrite("../test_images/fruits_raw.jpg", result);
+	imwrite("../test_images/test2_raw.jpg", result);
 	closing4(result, 200.);
 	opening8(result, 40., false);
 	showImage(result);
 	diaphragm(tmp, result);
 	showImage(tmp);
-	imwrite("../test_images/fruits_result.jpg", tmp);
+	imwrite("../test_images/test2_result.jpg", tmp);
     return 0;
 }
