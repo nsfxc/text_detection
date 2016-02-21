@@ -74,30 +74,34 @@
 %-------------------------------------------------------------------------------
 
 
-\section{Introduction}
+\section{Introduction} \mbox{} \vspace{-0.5cm}
+
 The development of smartphones and the growing demands in content-based image understanding have made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text \cite{epshtein2010detecting}.
 
-\subsection{Project definition}
+\subsection{Project definition} \mbox{} \vspace{-0.5cm}
+
 Early approach of text detection and recognition techniques such as OCR can be traced in early 1900s. Recent years, with the progress in the field of machine learning, pattern recognition and text localisation techniques make new breakthroughs \cite{anzai2012pattern}. With the study of some of those techniques, our project concern algorithms that can decode the text in images.
 
 The approach of our project can be divided into two parts --- text detection and text recognition. The detection part detect potentiel texts in images and output pure text candidates and the recognition part translate the image of text candidates to digital texts that can be read by machines.
 
-\subsection{Work breakdown}
+\subsection{Work breakdown} \mbox{} \vspace{-0.5cm}
+
 The whole project is carried out by Zhixing CAO and Yuesong SHEN. We use about one month reading artcles and set our task into three independent works: text area identification, character extraction and character recognition.
 
 All sub-tasks remain studies of articles and implementation works. Here is the overview of work breakdown:
 
 \begin{figure}[h]
 \begin{center}
-   \includegraphics[width=0.8\linewidth]{breakdowns.png}
+   \includegraphics[width=0.95\linewidth]{breakdowns.png}
 \end{center}
-\vspace{-4ex}
 \caption{Work breakdown}
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{State-of-the-art}
-\subsubsection{Text detection}
+\subsection{State-of-the-art} \mbox{} \vspace{-0.5cm}
+
+\subsubsection{Text detection} \mbox{} \vspace{-0.5cm}
+
 As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem has been studied a lot in recent researches and numerous methods are reported in the literature.
 
 All the methods used in recent research can be classified into two catagories: method based on texture \cite{ye2003robust} \cite{kim2003texture} and method based on connected componet \cite{yin2014robust} \cite{ezaki2004text}.
@@ -106,12 +110,14 @@ Texture-based method views texts as a special texture that is distinguishable fr
 
 Different with the texture-based method, the connected component based approach extracts regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition \cite{lucas2005icdar}, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen et al. \cite{chen2011robust} extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
 
-\subsubsection{Text recognition}
+\subsubsection{Text recognition} \mbox{} \vspace{-0.5cm}
+
 Converting text data from image and deciphering into digits is an important problem. Early physical photocell-based OCR implemented matrix matching by comparing an image to a stored glyph on a pixel-by-pixel basis. Those algorithms involve mostly extensive processing on the image such as thinning, smoothing contour analysis etc. because the majority of previous works uses geometrical and topological features. In recent research community the dominant approach to this problem is based on machine learning techniques --- a general inductive process building automatically a classifier by learning.
 
 In the textbook \textit{Pattern Recognition and Machine Learning} \cite{anzai2012pattern}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in pattern recognition. The early effort has been made around 1986s by Burr \cite{burr1988experiments}, Mehr\& Richfield \cite{rajavelu1989neural} to implement a neural network in character recognition. Recently, with the development of parallel computation and the use of GPU, efficient OCR system based on neural network become realistic. 
 
-\subsection{Our approach}
+\subsection{Our approach} \mbox{} \vspace{-0.5cm}
+
 In this report, we show you our approach of the text detection problem by combined texture-based method and connected component based method and our text recognition algorithm using neural network. 
 
 We adapte at first the method proposed by Liu et al \cite{liu2005text} to locate texts. This algorithm detects text candidate by applied classifier on contour pictures of the original image. Experimental results demonstrate that this approach is robust for varied font-size, font-color, background and languages, which can be used efficiently.
@@ -131,9 +137,12 @@ Our approach for text recognition is based on using neural network to classify c
 \label{fig:heatmap}
 \end{figure}
 
-\section{Text detection}
+\section{Text detection} \mbox{} \vspace{-0.5cm}
+
 In order to extract text from an image, we first need to determine the location of text zone in order to later perform the text recognition.  
-\subsection{Detecton of contour}
+
+\subsection{Contour extraction} \mbox{} \vspace{-0.5cm}
+
 Since text is always composed of strokes (so that it can be written by men), edge turns out to be an excelent characteristic for text zone identification. We have adopted the approach proposed by Liu and al. for edge information extraction, that is by applying Sobel edge detector on the image for 4 directions (vertical, horizontal, up-right to down-left and up-left to down-right) with distance defined on the RGB color space to get 4 edge maps. And this 4 edge maps are to be used to determine the text locations.
 
 \begin{figure}[h]
@@ -146,7 +155,8 @@ Since text is always composed of strokes (so that it can be written by men), edg
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{K-means classification}
+\subsection{K-means clustering} \mbox{} \vspace{-0.5cm}
+
 With the 4 edge maps, we can then apply a sliding window of size $w \times h$ to calculate the 6 different features as follows:
 
 \begin{itemize}
@@ -167,7 +177,8 @@ With the 4 edge maps, we then get 24 features for a given position of the slidin
 
 This approach, while effective for seperatings text and non-text zones, can not determine which one of the 2 zones is text zone, due to its non-supervised nature. We therefore need some extra effort to choose the text zone. There is no solution proposed in the original article. We propose 2 ideas to solve this problem: The first approach is to collect a set of manually choosed text and non-text data (an average feature vector for each zone in each image) and then train a classifier with supervised learing approach. The second approach is to use geometrical and topological informations of each zone to determine text zones.
 
-\subsection{Text area identification}
+\subsection{Text area identification} \mbox{} \vspace{-0.5cm}
+
 The result obtained by k-means algoritm needs to be polished to remove noise and other non text zone. We first use morphology operations “open” and “dilate” to fill up tiny holes and gaps and remove too small zones in the background. We can then apply some empirical rules to further remove zones which can not contain text. Each connected component of the refined text zones will then be boxed by a rectangle and returned as final results.
 
 \begin{figure}[h]
@@ -179,7 +190,8 @@ The result obtained by k-means algoritm needs to be polished to remove noise and
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{Connected components detection}
+\subsection{Connected components detection} \mbox{} \vspace{-0.5cm}
+
 The former method shows efficient results. However, it is still incapable of distinguishing each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract characters.
 
 At first, we set the input image into a binary matrix according to a threshold. Knowing that all colors can be encoded into a grayscale double number between 0 and 255, we can transform our input image by setting all pixels to 0 or 1 with their grayscale number by a threshold. Most of the time, pixels in a single letter have similar colors, so that in the binary matrix, these pixels have always the same value which will be considered as a same component.
@@ -195,7 +207,7 @@ The connected-component labeling algorithm is based on union-find method. The fi
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{Character extraction}
+\subsection{Character extraction} \mbox{} \vspace{-0.5cm}
 
 In many language, a single character can be composed by several different part. In the character extraction, those different components should be considered as a same part. So after the connected component detection. We calculate the gravity center $G{i}$ of each component and use gravity-color distance to centering them.
 
@@ -214,8 +226,10 @@ What's more, as characters usually have regular forms, which is to say, the rati
 \label{fig:heatmap}
 \end{figure} 
 
-\section{Text recognition}
-\subsection{Neural network}
+\section{Text recognition} \mbox{} \vspace{-0.5cm}
+
+\subsection{Neural network} \mbox{} \vspace{-0.5cm}
+
 After extract characters, we can move to the next step and try to recognize them.
 
 In machine learning, neural network is a powerful tool to estimate functions that maps input to output. Theoretically, it can approximate every non-linear functions when using a non-linear activation function. 
@@ -236,7 +250,7 @@ Our goal is to determine the activation function $\Theta$ by using gradient desc
 
 In our project, we use neural network to learn digital numbers.
 
-\subsection{Pattern recognition}
+\subsection{Digit and letter recognition} \mbox{} \vspace{-0.5cm}
 
 In essence, pattern recognition convers the following problem: 'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digital numbers' images. Then we use the same neural network to predict new digital numbers' images. 
 
@@ -244,9 +258,10 @@ For digital number recognition, we use MNIST dataset \cite{lecun1998gradient} wh
 
 Then we put all inputs into the neural network and using the trained neural network to recognize the extracted characters from the former step.
 
-\section{Result}
+\section{Result} \mbox{} \vspace{-0.5cm}
 
-\subsection{Text detection}
+\subsection{Text detection} \mbox{} \vspace{-0.5cm}
+
 Here are the text detection result with different photos:
 
 \begin{figure}[h]
@@ -258,11 +273,12 @@ Here are the text detection result with different photos:
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{Text recognition}
+\subsection{Text recognition} \mbox{} \vspace{-0.5cm}
+
 We show you in this subsection some results and analysis of digit recognition. The MNIST dataset consists of 70.000 handwritten digit images of 0 to 9. We have tested the network with 10.000 different images and with different parameters of the network.
 
-\subsubsection{Influence of different parameters}
-~\indent
+\subsubsection{Influence of different parameters} \mbox{} \vspace{-0.5cm}
+
 Here are some results with different parameters:
 
 \begin{small}
@@ -287,7 +303,8 @@ Here are some results with different parameters:
 
 We notice that we can get fairly good result by well choosing the parameters of the neural network such as the number of layers, number of nodes, size of training data etc.. 
 
-\subsubsection{Confusion matrix}
+\subsubsection{Confusion matrix} \mbox{} \vspace{-0.5cm}
+
 In order to better visualize the performance of the algorithm, we use here the confusion matrix to see if the system is confusing two classes. Here is the heatmap of the confusion matrix:
 
 \begin{figure}[h]
@@ -302,9 +319,9 @@ In order to better visualize the performance of the algorithm, we use here the c
 
 Each color corresponds with $log\frac{number\_of\_predicted\_i}{number\_actual\_ i}$, with this map, we can easily determine the error caused by the confusion of numbers. For exemple, the wrong prediction of number 3 is always 5 and the wrong prediction of number 4 is always 9. That is to say, the hand-writting of 4 is similary to the hand-writting of 9 and sometimes, it may lead to confusion in our system.
 
-\subsection{Remaining difficulties and possible improvement}
+\subsection{Remaining difficulties and possible improvements} \mbox{} \vspace{-0.5cm}
 
-\section{Conclusion}
+\section{Conclusion} \mbox{} \vspace{-0.5cm}
 
 
 %-------------------------------------------------------------------------------
