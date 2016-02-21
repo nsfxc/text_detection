@@ -73,7 +73,7 @@ The whole project is carried out by Zhixing CAO and Yuesong SHEN. Several works 
 \begin{figure}[h]
 \begin{center}
 	\vspace{-3ex}
-   \includegraphics[width=0.75\linewidth]{breakdowns.png}
+   \includegraphics[width=0.9\linewidth]{breakdowns.png}
 \end{center}
 \vspace{-4ex}
 \caption{Work breakdown}
@@ -109,6 +109,16 @@ In order to extract text from an image, we first need to determine the location 
 \subsection{Detecton of contour}
 Since text is always composed of strokes (so that it can be written by men), edge turns out to be an excelent characteristic for text zone identification. We have adopted the approach proposed by Liu and al. for edge information extraction, that is by applying Sobel edge detector on the image for 4 directions (vertical, horizontal, up-right to down-left and up-left to down-right) with distance defined on the RGB color space to get 4 edge maps. And this 4 edge maps are to be used to determine the text locations.
 
+\begin{figure}[h]
+\begin{center}
+	\vspace{-3ex}
+   \includegraphics[width=0.75\linewidth]{edge_filter_example.png}
+\end{center}
+\vspace{-4ex}
+\caption{Edge maps}
+\label{fig:heatmap}
+\end{figure}
+
 \subsection{K-means classification}
 With the 4 edge maps, we can then apply a sliding window of size $w \times h$ to calculate the 6 different features as follows:
 
@@ -131,14 +141,36 @@ This approach, while effective for seperatings text and non-text zones, can not 
 \subsection{Text area identification}
 The result obtained by k-means algoritm needs to be polished to remove noise and other non text zone. We first use morphology operations “open” and “dilate” to fill up tiny holes and gaps and remove too small zones in the background. We can then apply some empirical rules to further remove zones which can not contain text. Each connected component of the refined text zones will then be boxed by a rectangle and returned as final results.
 
-\subsection{Connected components detection}
-The former method shows efficient results. However, it is still incapable to distinguish each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract every character.
+\begin{figure}[h]
+\begin{center}
+	\vspace{-3ex}
+   \includegraphics[width=0.9\linewidth]{text_area_example.png}
+\end{center}
+\vspace{-4ex}
+\caption{Text area identification}
+\label{fig:heatmap}
+\end{figure}
 
-At first, we set the input image into a binary matrix according to a threshold. Knowing that all colors can be encoded into a grayscale double number between 0 and 255, we can transform our input image by set all pixels to 0 or 1 with their grayscale number by a threshold. In fact, at most time, pixels in a single letter have similar colors, so that in the binary matrix, these pixels have always the same value which will be considered as a same component.
+\subsection{Connected components detection}
+The former method shows efficient results. However, it is still incapable to distinguish each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract characters.
+
+At first, we set the input image into a binary matrix according to a threshold. Knowing that all colors can be encoded into a grayscale double number between 0 and 255, we can transform our input image by set all pixels to 0 or 1 with their grayscale number by a threshold. Most of the time, pixels in a single letter have similar colors, so that in the binary matrix, these pixels have always the same value which will be considered as a same component.
 
 The connected-component labeling algorithm is based on union-find method. The first pass of the algorithm propagate a pixel's label to its eight neighbors. Whenever the situation of connectivity arises, we attribute labels and union two set if it's neccesary. At the end of the first pass, each equivalence class has been completely determined and has a unique label, which is the root of its tree in the union-find structure. A second pass through the image then performs a translation, assigning to each pixel the label of its equivalence class.
 
+\begin{figure}[h]
+\begin{center}
+	\vspace{-3ex}
+   \includegraphics[width=0.75\linewidth]{connected_components_example.png}
+\end{center}
+\vspace{-4ex}
+\caption{Connected components detection}
+\label{fig:heatmap}
+\end{figure}
+
 \subsection{detection of words}
+
+In many language, a single character can be composed by several different part. So after the connected component detection. We calculate the gravity center of each component and attribute those who have nearby center coordinates component a common label.  
 
 \section{Text recognition}
 \subsection{Neural network}
@@ -160,8 +192,10 @@ Inspired of humans' central nervous systems, neural network uses connected nodes
 
 Our goal is to determine the activation function $\Theta$ by using gradient decent. At first, we need to set $\Theta$ to some random values in order to break the symmetry. Then, the forward propagation will determine the output while the backpropagation will correct the error.
 
-In our project, we use neural network to learn digital numbers and letters. With a well-chosen sample data set of numbers and letters, our neural network is able to recognize image formed text.
-\subsection{Pattern Recognition}
+In our project, we use neural network to learn digital numbers.
+
+\subsection{Pattern recognition}
+In essence, pattern recognition convers the problem:'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digital numbers' images. Then we use the same neural network to predict new digital numbers' images. 
 
 \section{Result}
 \subsection{Text detection}
