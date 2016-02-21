@@ -75,17 +75,17 @@
 
 
 \section{Introduction}
-The development of smartphones and the growing demands in content-based image understanding has made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text.
+The development of smartphones and the growing demands in content-based image understanding have made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text \cite{epshtein2010detecting}.
 
 \subsection{Project definition}
-Early approach of text detection and recognition techniques such as OCR can be traced in early 1900s. Recent years, with the progress in the field of machine learning pattern recognition and text localisation techniques make new breakthroughs. With the study of some of those techniques, our project concern algorithms that can decode the text in images.
+Early approach of text detection and recognition techniques such as OCR can be traced in early 1900s. Recent years, with the progress in the field of machine learning, pattern recognition and text localisation techniques make new breakthroughs \cite{anzai2012pattern}. With the study of some of those techniques, our project concern algorithms that can decode the text in images.
 
 The approach of our project can be divided into two parts --- text detection and text recognition. The detection part detect potentiel texts in images and output pure text candidates and the recognition part translate the image of text candidates to digital texts that can be read by machines.
 
 \subsection{Work breakdown}
-The whole project is carried out by Zhixing CAO and Yuesong SHEN. We have used about one month read artcles and set our task into three independent works : text area identification, character extraction, character recognition.
+The whole project is carried out by Zhixing CAO and Yuesong SHEN. We use about one month reading artcles and set our task into three independent works: text area identification, character extraction and character recognition.
 
-All sub-tasks remain further study of articles and implementation works. Here is the overview of work breakdown :
+All sub-tasks remain studies of articles and implementation works. Here is the overview of work breakdown:
 
 \begin{figure}[h]
 \begin{center}
@@ -100,21 +100,21 @@ All sub-tasks remain further study of articles and implementation works. Here is
 \subsubsection{Text detection}
 As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem has been studied a lot in recent researches and numerous methods are reported in the literature.
 
-All the methods used in recent research can be classified into two catagories: method based on texture and method based on connected componet.
+All the methods used in recent research can be classified into two catagories: method based on texture \cite{ye2003robust} \cite{kim2003texture} and method based on connected componet \cite{yin2014robust} \cite{ezaki2004text}.
 
-Texture-based method views texts as a special texture that is distinguishable from its background. Features are extracted over some special regions and a classifier is used to identify texts areas. Zhong and al have segmented caption text regions from background and used the intensity variation information. Ye and al have proposed a method using multiscale wavelet features and a coarse-to-fine algorithm to locate text lines under different backgrounds.
+Texture-based method views texts as a special texture that is distinguishable from its background. Features are extracted over some special regions and a classifier is used to identify texts areas. Zhong et al. \cite{zhong2000automatic} have segmented caption text regions from background and used the intensity variation information. Ye and al \cite{ye2003robust} have proposed a method using multiscale wavelet features and a coarse-to-fine algorithm to locate text lines under different backgrounds.
 
-Different with the texture-based method, the connected component based approach extracts regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen and al extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
+Different with the texture-based method, the connected component based approach extracts regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition \cite{lucas2005icdar}, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen et al. \cite{chen2011robust} extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
 
 \subsubsection{Text recognition}
 Converting text data from image and deciphering into digits is an important problem. Early physical photocell-based OCR implemented matrix matching by comparing an image to a stored glyph on a pixel-by-pixel basis. Those algorithms involve mostly extensive processing on the image such as thinning, smoothing contour analysis etc. because the majority of previous works uses geometrical and topological features. In recent research community the dominant approach to this problem is based on machine learning techniques --- a general inductive process building automatically a classifier by learning.
 
-In the textbook \textit{Pattern Recognition and Machine Learning}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in pattern recognition. The early effort has been made around 1986s by Burr, Mehr\&Richfield to implement a neural network in character recognition. Recently, with the development of parallel computation and the use of GPU, efficient OCR system based on neural network is realized. 
+In the textbook \textit{Pattern Recognition and Machine Learning} \cite{anzai2012pattern}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in pattern recognition. The early effort has been made around 1986s by Burr \cite{burr1988experiments}, Mehr\& Richfield \cite{rajavelu1989neural} to implement a neural network in character recognition. Recently, with the development of parallel computation and the use of GPU, efficient OCR system based on neural network become realistic. 
 
 \subsection{Our approach}
 In this report, we show you our approach of the text detection problem by combined texture-based method and connected component based method and our text recognition algorithm using neural network. 
 
-We adapte at first the method proposed by Liu and al to locate texts. This algorithm detects text candidate by applied classifier on contour pictures of the original image. Experimental results demonstrate that this approach is robust for varied font-size, font-color, background and languages, which can be used efficiently.
+We adapte at first the method proposed by Liu et al \cite{liu2005text} to locate texts. This algorithm detects text candidate by applied classifier on contour pictures of the original image. Experimental results demonstrate that this approach is robust for varied font-size, font-color, background and languages, which can be used efficiently.
 
 After locating the text, a connected component based method is used to extract word candidates. We find all components by using connected-component labeling algorithm. Then we use some geometric constraints and heuristic rules to merge them and extract letters and words candidates.  
 
@@ -240,7 +240,7 @@ In our project, we use neural network to learn digital numbers.
 
 In essence, pattern recognition convers the following problem: 'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digital numbers' images. Then we use the same neural network to predict new digital numbers' images. 
 
-For digital number recognition, we use MNIST dataset where all digit images have been size-normalized and centered in a fixed size image of 28$\times$28 pixels. And for English letter recognition, we use the Chars74K dataset where each image has a size of 1200$\times$900 pixels. For simplify our task, we resize the size of those images to 40$\times$30. Therefore, each image of digit has 784 features and each image of letter has 1200 features.
+For digital number recognition, we use MNIST dataset \cite{lecun1998gradient} where all digit images have been size-normalized and centered in a fixed size image of 28$\times$28 pixels. And for English letter recognition, we use the Chars74K dataset \cite{de2009character} where each letter image has a size of 1200$\times$900 pixels. For simplify our task, we resize the size of those images to 40$\times$30. Therefore, each image of digit has 784 features and each image of letter has 1200 features.
 
 Then we put all inputs into the neural network and using the trained neural network to recognize the extracted characters from the former step.
 
@@ -259,9 +259,7 @@ Here are the text detection result with different photos:
 \end{figure}
 
 \subsection{Text recognition}
-We use the MNIST database which consists of digits written by high school students and employees of the United States Census Bureau as our training data. The MNIST dataset consists of 70.000 handwritten digit images of 0 to 9.
-
-We have tested the network with 10.000 different images and with different parameters of the network.
+We show you in this subsection some results and analysis of digit recognition. The MNIST dataset consists of 70.000 handwritten digit images of 0 to 9. We have tested the network with 10.000 different images and with different parameters of the network.
 
 \subsubsection{Influence of different parameters}
 ~\indent
@@ -321,18 +319,8 @@ Text detection is an important subject for machine-human interaction and artific
 %-------------------------------------------------------------------------------
 % REFERENCES
 %-------------------------------------------------------------------------------
-\newpage
-\section*{References}
-\addcontentsline{toc}{section}{References}
-
-Anand, U., 2010. The Elusive Free Radicals, \textit{The Clinical Chemist,} [e-journal] Available at:<\url{http://www.clinchem.org/content/56/10/1649.full.pdf}> [Accessed 2 November 2013]
-\newline
-\newline
-
-Biology Forums, 2012. \textit{Normal glomerulus. Acute glomerulonephritis.} [online] Available at: <\url{http://biology-forums.com/index.php?action=gallery;sa=view;id=9284}> [Accessed 23 October 2013].
-\newline
-\newline
-
+\bibliographystyle{plain}
+\bibliography{biblio}
 \end{document}
 
 %-------------------------------------------------------------------------------
