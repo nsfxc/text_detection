@@ -77,33 +77,33 @@
 
 \section{Introduction} \mbox{} \vspace{-0.5cm}
 
-The development of smartphones and the growing demands in content-based image understanding have made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text \cite{epshtein2010detecting}.
+The development of smartphones and the growing demands in content-based image understanding have made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text \cite{epshtein2010detecting}. A machine can distinguish these two books only by recognize their titles.
 
 \subsection{Project definition} \mbox{} \vspace{-0.5cm}
 
-Early approach of text detection and recognition techniques such as OCR can be traced in early 1900s. Recent years, with the progress in the field of machine learning, pattern recognition and text localisation techniques make new breakthroughs \cite{anzai2012pattern}. With the study of some of those techniques, our project concern algorithms that can decode the text in images.
+Early approach of text detection and recognition techniques such as OCR techniques can be traced in early 1900s. Recent years, with the progress in the field of machine learning, pattern recognition and text localisation techniques make new breakthroughs \cite{anzai2012pattern}. With the study of some of those techniques, our project concern algorithms that can decode text in images.
 
-The approach of our project can be divided into two parts --- text detection and text recognition. The detection part detect potentiel texts in images and output pure text candidates and the recognition part translate the image of text candidates to digital texts that can be read by machines.
+The approach of our project can be divided into two parts --- text detection and text recognition. The detection part detect potentiel text in images and output text candidates and the recognition part translate the image of text candidates so that machine can understand.
 
 \subsection{Work breakdown} \mbox{} \vspace{-0.5cm}
 
-The whole project is carried out by Zhixing CAO and Yuesong SHEN. We use about one month reading artcles and set our task into three independent works: text area identification, character extraction and character recognition.
+The whole project is carried out by Zhixing CAO and Yuesong SHEN. We use about one month reading articles and set our task into three independent parts: text area identification, character extraction and character recognition.
 
-All sub-tasks remain studies of articles and implementation works. Here is the overview of work breakdown:
+All sub-tasks require studies of related articles and implementation works. Yuesong SHEN is in charge of the text area identification part and Zhixing CAO is in charge of the character extraction and recognition part. Here is the overview of our schedule:
 
 \begin{figure}[h]
 \begin{center}
    \includegraphics[width=0.95\linewidth]{breakdowns.png}
 \end{center}
-\caption{Work breakdown}
-\label{fig:heatmap}
+\caption{Schedule}
+\label{fig:schedule}
 \end{figure}
 
 \subsection{State-of-the-art} \mbox{} \vspace{-0.5cm}
 
 \subsubsection{Text detection} \mbox{} \vspace{-0.5cm}
 
-As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem has been studied a lot in recent researches and numerous methods are reported in the literature.
+As an essential prerequiste for text recognization, text within images has to be robustly located. This is a challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem has been studied a lot in recent researches and numerous methods are reported in the literature.
 
 All the methods used in recent research can be classified into two catagories: method based on texture \cite{ye2003robust} \cite{kim2003texture} and method based on connected componet \cite{yin2014robust} \cite{ezaki2004text}.
 
@@ -333,19 +333,23 @@ Each color corresponds with $log\frac{number\_of\_predicted\_i}{number\_actual\_
 
 \subsection{Remaining difficulties and possible improvements} \mbox{} \vspace{-0.5cm}
 
-There several improvements possible in our approach:
+There are several possible improvements to our projet:
 
-1. As mentionned in "3.2 K-means classification", we still need to determine which one of the resulting cluster represents text zone after the application of k-means algorithm. Due to the lack of proper image data set for training, we simply adopted the manual selection approach in our implementation.
+\begin{enumerate}
+\item As mentioned in section 3.2, after K-means clustering, we still need to determine which cluster represents text zone and which is the text. In our project, we adopte a manual selection approach. However, if we have an image dataset large enough, we can probably develop an automatic detection of these two clusters by training all images.
 
-2. The connected component approach can glue up multiple letters, especially when they are in fact connected as in hand-written style or with serif. Also, hieroglyphic symbols like Chinese characters can sometimes be broken into pieces. Efforts of reconstruction is possible but might easily lead to erroneous results. An alternative approach is to apply sliding window with well defined sizes and positions in different text zones to extract letters/characters, or in case of words written in a line, directly cut it into segments and perform extration piece by piece.
+\item The connected component approach can glue up multiple letters, especially when letters are in hand-written style or with a serif font. What's more, hieroglyphic symbols like Chinese characters can sometimes break into pieces. Our centering approach can solve part of these problem but can also lead to wrong conclusion. An alternative method is to apply sliding window with well defined sizes and positions in different text zones to extract characters, or in case of words written in a line, directly cut it into segments and perform extration piece by piece.
 
-3. The approach presented in this report only works with well-written/typed words written in horizontal direction. To read words written in inclined directions, we might need to first determine the direction by computing the principal component of the given text zone. To extract and rocognize other deformed text, we might need to further explore the geometrical and topological properties of the text zone.
+\item The approach presented in this report only works with words without to much distortion. For example, letters in graffitis which are overlapped and painted with different pattern can not be located and extracted by our system. One possible way is to using sliding window to extract every part of the image and apply text recognition to all extractions.
+   
+\end{enumerate}
+
 
 \section{Conclusion} \mbox{} \vspace{-0.5cm}
 
-We have presented in this report a working pipeline for text detection and recognition problem: text location by texture information, text extraction by connected component mathod, and text recognition using artificial neural network. Multiple machine learning techniques (K-means, ANN, etc.) and image processing techniques (Sobel edge detector, Ostu method, opening/closing, connected-components, etc.) have been combined in this approach to give an efficient implementation to the text detection problem.  
+We implement in this project a whole pipeline for content-based image understanding problem. Multiple machine learning techniques (K-means, ANN, etc.) and image processing techniques (Sobel edge detector, Ostu method, opening/closing, connected-components, etc.) have been combined in this approach for solving text detection and recognition problem.  
 
-Text detection is an important subject for machine-human interaction and artificial intelligence with great utility, since a lettered machine can much better understand and interact with human. We can imagine such system be used to help visually impaired people to read books or any words/signs in the surroundings, or for automatic cars to understand road signs and react better in real time. And thanks to recent developments in electronics, computer science and data science, efficient implementations of this technique has been made possible.  
+Text detection is an important subject for machine-human interaction and artificial intelligence with great utility. We can imagine such a system used to help visually impaired people to read books and signs in the surroundings. It can also be used for automatic cars to understand road signs and react better in real time. Thanks to recent developments in electronics, computer science and data science, efficient implementations of this technique has been made possible.  
 
 %-------------------------------------------------------------------------------
 % REFERENCES
