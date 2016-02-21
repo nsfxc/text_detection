@@ -120,10 +120,18 @@ This approach, while effective for seperatings text and non-text zones, can not 
 \subsection{Text area identification}
 The result obtained by k-means algoritm needs to be polished to remove noise and other non text zone. We first use morphology operations “open” and “dilate” to fill up tiny holes and gaps and remove too small zones in the background. We can then apply some empirical rules to further remove zones which can not contain text. Each connected component of the refined text zones will then be boxed by a rectangle and returned as final results.
 \subsection{Connected components detection}
+The former method shows efficient results. However, it is still incapable to distinguish each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract every character.
+
+At first, we set the input image into a binary matrix according to a threshold. Knowing that all colors can be encoded into a grayscale double number between 0 and 255, we can transform our input image by set all pixels to 0 or 1 with their grayscale number by a threshold. In fact, at most time, pixels in a single letter have similar colors, so that in the binary matrix, these pixels have always the same value which will be considered as a same component.
+
+The connected-component labeling algorithm is based on union-find method. The first pass of the algorithm propagate a pixel's label to its eight neighbors. Whenever the situation of connectivity arises, we attribute labels and union two set if it's neccesary. At the end of the first pass, each equivalence class has been completely determined and has a unique label, which is the root of its tree in the union-find structure. A second pass through the image then performs a translation, assigning to each pixel the label of its equivalence class.
+
 \subsection{detection of words}
 
 \section{Text recognition}
 \subsection{Neural network}
+After extract characters, we can move to the next step and try to recognize them.
+
 In machine learning, neural network is a powerful tool to estimate functions that maps input to output. Theoretically, it can approximate every non-linear functions when using non-linear activation function. 
 
 Inspired of humans' central nervous systems, neural network uses connected nodes, known as neurons, to imitate the nervous system. A neural network is a complex adaptive system with ability to \textit{learn}. It consists of multiple layers. Apart from the input layer, all layers have an activation function. By adjusting this function according to our given datas, known as training set, the network achieve to learn and understand these datas. Here is the structure of the neural network:
@@ -143,6 +151,55 @@ Our goal is to determine the activation function $\Theta$ by using gradient dece
 In our project, we use neural network to learn digital numbers and letters. With a well-chosen sample data set of numbers and letters, our neural network is able to recognize image formed text.
 \subsection{Pattern Recognition}
 
-\section{Conclusion}
+\section{Result}
+\subsection{Text detection}
+\subsection{Text recognition}
+We use the MNIST database which consists of digits written by high school students and employees of the United States Census Bureau as our training data. The MNIST dataset consists of 70.000 handwritten digit immages of 0 to 9.
+
+We have tested the network with 10.000 different images and with different parameters of the network.
+
+\subsubsection{Influence of different parameters}
+~\indent
+Here are some results with different parameters:
+
+\begin{small}
+	\begin{tabular}{ |c|c|c|c|c| }
+	\hline
+	$num\_training\_data$ & $num\_layers$ & $num\_nodes$ & $num\_iteration$ & $accuracy$ \\
+	\hline
+	60000 & 1 & 200  & 30 & 92.56 \\
+	\hline
+	6000 & 1 & 200  & 30 & 91.96 \\
+	\hline
+	6000 & 1 & 20  & 30 & 91.02 \\
+	\hline
+	6000	 & 1 & 10  & 30 & 84.59 \\
+	\hline
+	6000 & 2 & 20,20  & 30 & 85.7\\
+	\hline
+	6000 & 2 & 20,20  & 45 & 90.33\\
+	\hline
+	\end{tabular}
+\end{small}
+
+We notice that we can get fairly good result by well choosing the parameters of the neural network such as the number of layers, number of nodes, size of training data etc.. 
+
+\subsubsection{Confusion matrix}
+In order to better visualize the performance of the algorithm, we use here the confusion matrix to see if the system is confusing two classes. Here is the heatmap of the confusion matrix:
+
+\begin{figure}[h]
+\vspace{-1ex}
+\begin{center}
+   \includegraphics[width=1.0\linewidth]{heatmap_log.png}
+\end{center}
+\vspace{-3ex}
+\caption{Heatmap of confusion matrix}
+\label{fig:heatmap}
+\end{figure}
+
+Each color correspond with $log\frac{number\_of\_predicted\_i}{number\_actual\_ i}$, with this map, we can easily determine the error caused by the confusion of numbers. For exemple, the wrong predict of number 3 is always 5 and the wrong predict of number 4 is always 9. That is to say, the hand-writting of 4 is similary to the hand-writting of 9 and sometimes, it may lead to confusion to our system.
+
+
+
 
 \end{document}
