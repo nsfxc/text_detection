@@ -77,25 +77,27 @@
 \section{Introduction}
 The development of smartphones and the growing demands in content-based image understanding has made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text.
 
-\subsection{Goal of project}
+\subsection{Project definition}
 Early approach of text detection and recognition techniques such as OCR can be traced in early 1900s. Recent years, with the progress in the field of machine learning pattern recognition and text localisation techniques make new breakthroughs. With the study of some of those techniques, our project concern algorithms that can decode the text in images.
 
 The approach of our project can be divided into two parts --- text detection and text recognition. The detection part detect potentiel texts in images and output pure text candidates and the recognition part translate the image of text candidates to digital texts that can be read by machines.
 
 \subsection{Work breakdown}
-The whole project is carried out by Zhixing CAO and Yuesong SHEN. Several works have been carried out independently during the project. Here is the overview of work breakdown.
+The whole project is carried out by Zhixing CAO and Yuesong SHEN. We have used about one month read artcles and set our task into three independent works : text area identification, character extraction, character recognition.
+
+All sub-tasks remain further study of articles and implementation works. Here is the overview of work breakdown :
 
 \begin{figure}[h]
 \begin{center}
-   \includegraphics[width=0.9\linewidth]{breakdowns.png}
+   \includegraphics[width=0.8\linewidth]{breakdowns.png}
 \end{center}
 \vspace{-4ex}
 \caption{Work breakdown}
 \label{fig:heatmap}
 \end{figure}
- 
-\section{State of the art}
-\subsection{Text detection}
+
+\subsection{State-of-the-art}
+\subsubsection{Text detection}
 As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem has been studied a lot in recent researches and numerous methods are reported in the literature.
 
 All the methods used in recent research can be classified into two catagories: method based on texture and method based on connected componet.
@@ -104,7 +106,7 @@ Texture-based method views texts as a special texture that is distinguishable fr
 
 Different with the texture-based method, the connected component based approach extracts regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen and al extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
 
-\subsection{Text recognition}
+\subsubsection{Text recognition}
 Converting text data from image and deciphering into digits is an important problem. Early physical photocell-based OCR implemented matrix matching by comparing an image to a stored glyph on a pixel-by-pixel basis. Those algorithms involve mostly extensive processing on the image such as thinning, smoothing contour analysis etc. because the majority of previous works uses geometrical and topological features. In recent research community the dominant approach to this problem is based on machine learning techniques --- a general inductive process building automatically a classifier by learning.
 
 In the textbook \textit{Pattern Recognition and Machine Learning}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in pattern recognition. The early effort has been made around 1986s by Burr, Mehr\&Richfield to implement a neural network in character recognition. Recently, with the development of parallel computation and the use of GPU, efficient OCR system based on neural network is realized. 
