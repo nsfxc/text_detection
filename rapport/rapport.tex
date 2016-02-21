@@ -321,8 +321,19 @@ Each color corresponds with $log\frac{number\_of\_predicted\_i}{number\_actual\_
 
 \subsection{Remaining difficulties and possible improvements} \mbox{} \vspace{-0.5cm}
 
+There several improvements possible in our approach:
+
+1. As mentionned in "3.2 K-means classification", we still need to determine which one of the resulting cluster represents text zone after the application of k-means algorithm. Due to the lack of proper image data set for training, we simply adopted the manual selection approach in our implementation.
+
+2. The connected component approach can glue up multiple letters, especially when they are in fact connected as in hand-written style or with serif. Also, hieroglyphic symbols like Chinese characters can sometimes be broken into pieces. Efforts of reconstruction is possible but might easily lead to erroneous results. An alternative approach is to apply sliding window with well defined sizes and positions in different text zones to extract letters/characters, or in case of words written in a line, directly cut it into segments and perform extration piece by piece.
+
+3. The approach presented in this report only works with well-written/typed words written in horizontal direction. To read words written in inclined directions, we might need to first determine the direction by computing the principal component of the given text zone. To extract and rocognize other deformed text, we might need to further explore the geometrical and topological properties of the text zone.
+
 \section{Conclusion} \mbox{} \vspace{-0.5cm}
 
+We have presented in this report a working pipeline for text detection and recognition problem: text location by texture information, text extraction by connected component mathod, and text recognition using artificial neural network. Multiple machine learning techniques (K-means, ANN, etc.) and image processing techniques (Sobel edge detector, Ostu method, opening/closing, connected-components, etc.) have been combined in this approach to give an efficient implementation to the text detection problem.  
+
+Text detection is an important subject for machine-human interaction and artificial intelligence with great utility, since a lettered machine can much better understand and interact with human. We can imagine such system be used to help visually impaired people to read books or any words/signs in the surroundings, or for automatic cars to understand road signs and react better in real time. And thanks to recent developments in electronics, computer science and data science, efficient implementations of this technique has been made possible.  
 
 %-------------------------------------------------------------------------------
 % REFERENCES
