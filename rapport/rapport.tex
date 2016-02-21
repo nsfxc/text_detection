@@ -1,64 +1,78 @@
-%---------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%--------------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LaTeX Template: Project Titlepage Modified (v 0.1) by rcx
+%
+% Original Source: http://www.howtotex.com
+% Date: February 2014
+% 
+% This is a title page template which be used for articles & reports.
+% 
+% This is the modified version of the original Latex template from
+% aforementioned website.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \documentclass[paper=a4, french, 11pt]{scrartcl} 
+\usepackage[a4paper]{geometry}
+\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+\usepackage{url, lipsum}
 
-\usepackage[utf8]{inputenc} 
-\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
-\usepackage{fourier} 
-\usepackage[francais]{babel} % English language/hyphenation
-\usepackage{amsmath,amsfonts,amsthm} % Math packages
-\usepackage{colortbl}
-\usepackage{graphicx}
-\usepackage{sectsty} % Allows customizing section commands
-\usepackage{fancyhdr} % Custom headers and footers
 
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\onehalfspacing
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
 
-\allsectionsfont{\centering \normalfont\scshape} 
-
-\sectionfont{\normalfont\scshape}
-\subsectionfont{\normalfont\scshape}
-\subsubsectionfont{\normalfont\scshape}
-
-\pagestyle{fancyplain} 
-\fancyhead{} 
-\fancyfoot[L]{} % Empty left footer
-\fancyfoot[C]{} % Empty center footer
-\fancyfoot[R]{\thepage} % Page numbering for right footer
-\renewcommand{\headrulewidth}{0pt} % Remove header underlines
-\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
-
-\setlength{\headheight}{13.6pt} % Customize the height of the header
-\setlength\parindent{0pt} 
-
-\definecolor{bg}{RGB}{235,235,235}
-\definecolor{bk}{RGB}{135,135,135}
-\newcommand{\class}[1]{\colorbox{bg}
-{\textcolor{red}{\usefont{OT1}{cmtt}{m}{n}#1}}}
-\newcommand{\cmd}[1]{\colorbox{bk}{\textcolor{white}
-{\usefont{OT1}{cmtt}{m}{n}#1}}}
-\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
-
-%-----------------------------------------------------------
-%	TITLE SECTION
-%-----------------------------------------------------------
-
-\title{	
-\normalfont \normalsize 
-\textsc{Projet INF582} \\ [25pt] 
-\horrule{0.5pt} \\[0.5cm] % Thin top horizontal rule
-\huge Text detection \\ % The assignment title
-\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
-}
-
-\author{Zhixing CAO, Yuesong SHEN} % Your name
-
-\date{\normalsize\today} % Today's date or a custom date
+%-------------------------------------------------------------------------------
+% HEADER & FOOTER
+%-------------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+\fancyhead[L]{Text detection and recognition}
+\fancyhead[R]{ECOLE POLYTECHNIQUE}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+%-------------------------------------------------------------------------------
+% TITLE PAGE
+%-------------------------------------------------------------------------------
 
 \begin{document}
 
-\setlength\parindent{12pt}
-\maketitle % Print the title
+\title{ \normalsize \textsc{Projet 3A}
+        \\ [2.0cm]
+        \HRule{0.5pt} \\
+        \LARGE \textbf{\uppercase{Text detection and recognition}}
+        \HRule{2pt} \\ [0.5cm]
+        \normalsize \today \vspace*{5\baselineskip}}
+
+\date{}
+
+\author{
+        Zhixing CAO, Yuesong SHEN \\
+        Ecole Polytechnique }
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+%-------------------------------------------------------------------------------
+% Section title formatting
+\sectionfont{\scshape}
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+% BODY
+%-------------------------------------------------------------------------------
+
 
 \section{Introduction}
 The development of smartphones and the growing demands in content-based image understanding has made the text detection a crucial topic in machine-human interaction. It has been shown that the performance of image retrieval depends critically on the performance of text detection and recognition. For example, two book covers with different titles but identical background prove to be considered virtually indistinguish without detecting and recognizing the text.
@@ -69,10 +83,10 @@ Early approach of text detection and recognition techniques such as OCR can be t
 The approach of our project can be divided into two parts --- text detection and text recognition. The detection part detect potentiel texts in images and output pure text candidates and the recognition part translate the image of text candidates to digital texts that can be read by machines.
 
 \subsection{Work breakdown}
-The whole project is carried out by Zhixing CAO and Yuesong SHEN. Several works have been carried out independently during the project. Here is the overview of work breakdown.\
+The whole project is carried out by Zhixing CAO and Yuesong SHEN. Several works have been carried out independently during the project. Here is the overview of work breakdown.
+
 \begin{figure}[h]
 \begin{center}
-	\vspace{-3ex}
    \includegraphics[width=0.9\linewidth]{breakdowns.png}
 \end{center}
 \vspace{-4ex}
@@ -104,6 +118,17 @@ After locating the text, a connected component based method is used to extract w
 
 Our approach for text recognition is based on using neural network to classify characters. With a training set of different kind of characters, the neural network is constructed in order to match an input character to a learned one. 
 
+
+\begin{figure}[h]
+\begin{center}
+	\vspace{-1ex}
+   \includegraphics[width=0.9\linewidth]{process.png}
+\end{center}
+\vspace{-4ex}
+\caption{Overview}
+\label{fig:heatmap}
+\end{figure}
+
 \section{Text detection}
 In order to extract text from an image, we first need to determine the location of text zone in order to later perform the extraction and the recognition.  
 \subsection{Detecton of contour}
@@ -111,7 +136,7 @@ Since text is always composed of strokes (so that it can be written by men), edg
 
 \begin{figure}[h]
 \begin{center}
-	\vspace{-3ex}
+	\vspace{-1ex}
    \includegraphics[width=0.75\linewidth]{edge_filter_example.png}
 \end{center}
 \vspace{-4ex}
@@ -122,15 +147,17 @@ Since text is always composed of strokes (so that it can be written by men), edg
 \subsection{K-means classification}
 With the 4 edge maps, we can then apply a sliding window of size $w \times h$ to calculate the 6 different features as follows:
 
-$\mu = \frac{1}{w \times h} \sum_{i=1}^{w} \sum_{j=1}^{h} E(i,j)$
+\begin{itemize}
+\item $\mu = \frac{1}{w \times h} \sum_{i=1}^{w} \sum_{j=1}^{h} E(i,j)$
 
-$\sigma =\sqrt{\frac{1}{w \times h} \sum_{i=1}^{w} \sum_{j=1}^{h} (E(i,j) - \mu)}$
+\item $\sigma =\sqrt{\frac{1}{w \times h} \sum_{i=1}^{w} \sum_{j=1}^{h} (E(i,j) - \mu)}$
 
-$Et = \sum_{i,j} E(i,j)\dot \log E(i,j) $
+\item $ Et = \sum_{i,j} E(i,j)\log E(i,j) $
 
-$I = \sum_{i,j} (i-j)^2 E(i,j)$
+\item $ I = \sum_{i,j} (i-j)^2 E(i,j)$
 
-$H = \sum_{i,j} \frac{1}{1+(i-j)^2}E(i,j)$
+\item $ H = \sum_{i,j} \frac{1}{1+(i-j)^2}E(i,j)$
+\end{itemize}
 
 Where $E(i,j)$ is the value of pixel in i\textsuperscript{th} row, j\textsuperscript{th} column, here it is the grayscale color of each pixel. $\mu$ is the mean value in sliding window, $\sigma$ is their standard deviation, $ Et$ is their entropy, $ I$  is their gravity center and $ H$ is the expectation.
 
@@ -143,7 +170,6 @@ The result obtained by k-means algoritm needs to be polished to remove noise and
 
 \begin{figure}[h]
 \begin{center}
-	\vspace{-3ex}
    \includegraphics[width=0.9\linewidth]{text_area_example.png}
 \end{center}
 \vspace{-4ex}
@@ -160,7 +186,6 @@ The connected-component labeling algorithm is based on union-find method. The fi
 
 \begin{figure}[h]
 \begin{center}
-	\vspace{-3ex}
    \includegraphics[width=0.75\linewidth]{connected_components_example.png}
 \end{center}
 \vspace{-4ex}
@@ -168,9 +193,24 @@ The connected-component labeling algorithm is based on union-find method. The fi
 \label{fig:heatmap}
 \end{figure}
 
-\subsection{detection of words}
+\subsection{Character extraction}
 
-In many language, a single character can be composed by several different part. So after the connected component detection. We calculate the gravity center of each component and attribute those who have nearby center coordinates component a common label.  
+In many language, a single character can be composed by several different part. In the character extraction, those different components should be considered as a same part. So after the connected component detection. We calculate the gravity center $G{i}$ of each component and use gravity-color distance to centering them.
+
+Gravity-color distance of component $ i$ and $ j$:
+
+$\sqrt{(euclidien distance of G{i}, G{j})^2 + (greyscale of i - greyscale of j)^2}$
+
+What's more, as characters usually have regular forms, which is to say, the ratio between their width and their height are never too large or two small. We use the height and the width of each connected component to filter non-text cadidate as well. 
+
+\begin{figure}[h]
+\begin{center}
+   \includegraphics[width=0.9\linewidth]{component_centering_example.png}
+\end{center}
+\vspace{-4ex}
+\caption{Components centering example}
+\label{fig:heatmap}
+\end{figure}
 
 \section{Text recognition}
 \subsection{Neural network}
@@ -182,7 +222,7 @@ Inspired of humans' central nervous systems, neural network uses connected nodes
 
 \begin{figure}[h]
 \begin{center}
-	\vspace{-3ex}
+	\vspace{-1ex}
    \includegraphics[width=0.75\linewidth]{network.png}
 \end{center}
 \vspace{-4ex}
@@ -195,11 +235,29 @@ Our goal is to determine the activation function $\Theta$ by using gradient dece
 In our project, we use neural network to learn digital numbers.
 
 \subsection{Pattern recognition}
-In essence, pattern recognition convers the problem:'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digital numbers' images. Then we use the same neural network to predict new digital numbers' images. 
+In essence, pattern recognition convers the problem:'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digit and letter images. Then we use the same neural network to predict new images.
+
+For digital number recognition, we use MNIST dataset where all digit images have been size-normalized and centered in a fixed size image of 28$\times$28 pixels. And for English letter recognition, we use the Chars74K dataset where each image has a size of 1200$\times$900 pixels. For simplify our task, we resize the size of those images to 40$\times$30. Therefore, each image of digit has 784 features and each image of letter has 1200 features.
+
+Then we put all inputs into the neural network and using the trained neural network to recognize the extracted characters from the former step.
 
 \section{Result}
+
 \subsection{Text detection}
+Here are the text detection result with different photos:
+
+\begin{figure}[h]
+\begin{center}
+   \includegraphics[width=1.0\linewidth]{results.png}
+\end{center}
+\vspace{-3ex}
+\caption{Heatmap of confusion matrix}
+\label{fig:heatmap}
+\end{figure}
+
 \subsection{Text recognition}
+We show you here some results with digit recognition.
+
 We use the MNIST database which consists of digits written by high school students and employees of the United States Census Bureau as our training data. The MNIST dataset consists of 70.000 handwritten digit immages of 0 to 9.
 
 We have tested the network with 10.000 different images and with different parameters of the network.
@@ -245,7 +303,90 @@ In order to better visualize the performance of the algorithm, we use here the c
 
 Each color correspond with $log\frac{number\_of\_predicted\_i}{number\_actual\_ i}$, with this map, we can easily determine the error caused by the confusion of numbers. For exemple, the wrong predict of number 3 is always 5 and the wrong predict of number 4 is always 9. That is to say, the hand-writting of 4 is similary to the hand-writting of 9 and sometimes, it may lead to confusion to our system.
 
+\subsection{Remaining difficulties and possible improvement}
 
+\section{Conclusion}
+
+
+%-------------------------------------------------------------------------------
+% REFERENCES
+%-------------------------------------------------------------------------------
+\newpage
+\section*{References}
+\addcontentsline{toc}{section}{References}
+
+Anand, U., 2010. The Elusive Free Radicals, \textit{The Clinical Chemist,} [e-journal] Available at:<\url{http://www.clinchem.org/content/56/10/1649.full.pdf}> [Accessed 2 November 2013]
+\newline
+\newline
+
+Biology Forums, 2012. \textit{Normal glomerulus. Acute glomerulonephritis.} [online] Available at: <\url{http://biology-forums.com/index.php?action=gallery;sa=view;id=9284}> [Accessed 23 October 2013].
+\newline
+\newline
+
+\end{document}
+
+%-------------------------------------------------------------------------------
+% SNIPPETS
+%-------------------------------------------------------------------------------
+
+%\begin{figure}[!ht]
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{file_name}
+%   \caption{}
+%   \centering
+%   \label{label:file_name}
+%\end{figure}
+
+%\begin{figure}[!ht]
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{graph}
+%   \caption{Blood pressure ranges and associated level of hypertension (American Heart Association, 2013).}
+%   \centering
+%   \label{label:graph}
+%\end{figure}
+
+%\begin{wrapfigure}{r}{0.30\textwidth}
+%   \vspace{-40pt}
+%   \begin{center}
+%       \includegraphics[width=0.29\textwidth]{file_name}
+%   \end{center}
+%   \vspace{-20pt}
+%   \caption{}
+%   \label{label:file_name}
+%\end{wrapfigure}
+
+%\begin{wrapfigure}{r}{0.45\textwidth}
+%   \begin{center}
+%       \includegraphics[width=0.29\textwidth]{manometer}
+%   \end{center}
+%   \caption{Aneroid sphygmomanometer with stethoscope (Medicalexpo, 2012).}
+%   \label{label:manometer}
+%\end{wrapfigure}
+
+%\begin{table}[!ht]\footnotesize
+%   \centering
+%   \begin{tabular}{cccccc}
+%   \toprule
+%   \multicolumn{2}{c} {Pearson's correlation test} & \multicolumn{4}{c} {Independent t-test} \\
+%   \midrule    
+%   \multicolumn{2}{c} {Gender} & \multicolumn{2}{c} {Activity level} & \multicolumn{2}{c} {Gender} \\
+%   \midrule
+%   Males & Females & 1st level & 6th level & Males & Females \\
+%   \midrule
+%   \multicolumn{2}{c} {BMI vs. SP} & \multicolumn{2}{c} {Systolic pressure} & \multicolumn{2}{c} {Systolic Pressure} \\
+%   \multicolumn{2}{c} {BMI vs. DP} & \multicolumn{2}{c} {Diastolic pressure} & \multicolumn{2}{c} {Diastolic pressure} \\
+%   \multicolumn{2}{c} {BMI vs. MAP} & \multicolumn{2}{c} {MAP} & \multicolumn{2}{c} {MAP} \\
+%   \multicolumn{2}{c} {W:H ratio vs. SP} & \multicolumn{2}{c} {BMI} & \multicolumn{2}{c} {BMI} \\
+%   \multicolumn{2}{c} {W:H ratio vs. DP} & \multicolumn{2}{c} {W:H ratio} & \multicolumn{2}{c} {W:H ratio} \\
+%   \multicolumn{2}{c} {W:H ratio vs. MAP} & \multicolumn{2}{c} {\% Body fat} & \multicolumn{2}{c} {\% Body fat} \\
+%   \multicolumn{2}{c} {} & \multicolumn{2}{c} {Height} & \multicolumn{2}{c} {Height} \\
+%   \multicolumn{2}{c} {} & \multicolumn{2}{c} {Weight} & \multicolumn{2}{c} {Weight} \\
+%   \multicolumn{2}{c} {} & \multicolumn{2}{c} {Heart rate} & \multicolumn{2}{c} {Heart rate} \\
+%   \bottomrule
+%   \end{tabular}
+%   \caption{Parameters that were analysed and related statistical test performed for current study. BMI - body mass index; SP - systolic pressure; DP - diastolic pressure; MAP - mean arterial pressure; W:H ratio - waist to hip ratio.}
+%   \label{label:tests}
+%\end{table}
 
 
 \end{document}
