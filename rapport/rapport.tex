@@ -96,23 +96,23 @@ The whole project is carried out by Zhixing CAO and Yuesong SHEN. Several works 
  
 \section{State of the art}
 \subsection{Text detection}
-As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem have been studied a lot in recent researches and numerous methods are reported in the literature.
+As an essential prerequiste for text recognization, text within images has to be robustly located. This is challenge task due to the variety of the text form, such as variations in languages, font and style, geometric and photometric distortions, partial occlusion, and lightening conditions. Text detection problem has been studied a lot in recent researches and numerous methods are reported in the literature.
 
 All the methods used in recent research can be classified into two catagories: method based on texture and method based on connected componet.
 
-Texture-based method views texts as a special texture that is distinguish from its background. Features are extracted over some special regions and a classifier is used to identify texts areas. Zhong and al have segmented caption text regions from background and used the intensity variation information. Ye and al have proposed a method using multiscale wavelet featires and a coarse-to-fine algorithm to locate text lines under different backgrounds.
+Texture-based method views texts as a special texture that is distinguishable from its background. Features are extracted over some special regions and a classifier is used to identify texts areas. Zhong and al have segmented caption text regions from background and used the intensity variation information. Ye and al have proposed a method using multiscale wavelet features and a coarse-to-fine algorithm to locate text lines under different backgrounds.
 
-Different with the texture-based method, the connected component based approach extrats regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen and al extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
+Different with the texture-based method, the connected component based approach extracts regions from the image and selects text candidates using some geometric rules. In ICDAR 2005 text locating competition, the best result applies have used an adaptive binarization method to find connected components and forms text lines based on geometric properties. Recently Chen and al extract letter candidates by employing edge-enhanced Maximally Stable Extremal Regions and using geometric and stroke width information to exclude non-text objects. They have achieved an accuracy score of 95\%.
 
 \subsection{Text recognition}
-Converting text data from image and deciphering into digits is an important problem. Early physical photocell-based OCR implemented matrix matching by comparing an image to a stored glyph on a pixel-by-pixel based. Those algorithms involve mostly extensive processing on the image such as thinning, smoothing contour analysis etc. because the majority of previous works uses geometrial and topological features. In recent research community the dominant approach to this problem is based on machine learning techniques --- a general inductive process builds automatically a classifier by learning.
+Converting text data from image and deciphering into digits is an important problem. Early physical photocell-based OCR implemented matrix matching by comparing an image to a stored glyph on a pixel-by-pixel basis. Those algorithms involve mostly extensive processing on the image such as thinning, smoothing contour analysis etc. because the majority of previous works uses geometrical and topological features. In recent research community the dominant approach to this problem is based on machine learning techniques --- a general inductive process building automatically a classifier by learning.
 
-In the textbook \textit{Pattern Recognition and Machine Learning}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in pattern recognition. The early effort has been made around 1986s by Burr, Mehr\&Richfield to implement a neural networks in character recognition. Recently, with the development of paralel computation and the use of GPU, efficiant OCR system based on neural network is realized. 
+In the textbook \textit{Pattern Recognition and Machine Learning}, Bishop reflects recent developments in the field of pattern recognition and machine learning and shows potential usages of machine learning method in pattern recognition. The early effort has been made around 1986s by Burr, Mehr\&Richfield to implement a neural network in character recognition. Recently, with the development of parallel computation and the use of GPU, efficient OCR system based on neural network is realized. 
 
 \subsection{Our approach}
 In this report, we show you our approach of the text detection problem by combined texture-based method and connected component based method and our text recognition algorithm using neural network. 
 
-We adapte at first the method proposed by Liu and al to locate texts. This algorithm detects text candidate by applied classifier on contour pictures of the original image. Experimental results demonstrate that this approach is robust for font-size, font-color, background and languages, which can be used efficiently.
+We adapte at first the method proposed by Liu and al to locate texts. This algorithm detects text candidate by applied classifier on contour pictures of the original image. Experimental results demonstrate that this approach is robust for varied font-size, font-color, background and languages, which can be used efficiently.
 
 After locating the text, a connected component based method is used to extract word candidates. We find all components by using connected-component labeling algorithm. Then we use some geometric constraints and heuristic rules to merge them and extract letters and words candidates.  
 
@@ -130,7 +130,7 @@ Our approach for text recognition is based on using neural network to classify c
 \end{figure}
 
 \section{Text detection}
-In order to extract text from an image, we first need to determine the location of text zone in order to later perform the extraction and the recognition.  
+In order to extract text from an image, we first need to determine the location of text zone in order to later perform the text recognition.  
 \subsection{Detecton of contour}
 Since text is always composed of strokes (so that it can be written by men), edge turns out to be an excelent characteristic for text zone identification. We have adopted the approach proposed by Liu and al. for edge information extraction, that is by applying Sobel edge detector on the image for 4 directions (vertical, horizontal, up-right to down-left and up-left to down-right) with distance defined on the RGB color space to get 4 edge maps. And this 4 edge maps are to be used to determine the text locations.
 
@@ -159,11 +159,11 @@ With the 4 edge maps, we can then apply a sliding window of size $w \times h$ to
 \item $ H = \sum_{i,j} \frac{1}{1+(i-j)^2}E(i,j)$
 \end{itemize}
 
-Where $E(i,j)$ is the value of pixel in i\textsuperscript{th} row, j\textsuperscript{th} column, here it is the grayscale color of each pixel. $\mu$ is the mean value in sliding window, $\sigma$ is their standard deviation, $ Et$ is their entropy, $ I$  is their gravity center and $ H$ is the expectation.
+Where $E(i,j)$ is the value of pixel in i\textsuperscript{th} row, j\textsuperscript{th} column, here it is the grayscale color of a pixel in an edge map. $\mu$ is the mean value in sliding window, $\sigma$ is their standard deviation, $ Et$ is their entropy, $ I$  is their gravity center and $ H$ is the expectation.
 
-With the 4 edge maps, we then get 24 features for a given position of the sliding window. And since there is no apparent cost function available, we need an unsupervised clustering algorithm to distinguish text zones from their surroundings. We apply therefore the k-means algorithm for this, as proposed in the paper of Liu and al..
+With the 4 edge maps, we then get 24 features for a given position of the sliding window. And since there is no apparent cost function available, we need an unsupervised clustering algorithm to distinguish text zones from their surroundings. We apply therefore the k-means algorithm for this, as proposed in the paper of Liu and al.
 
-This approach, while effective for seperatings text and non-text zones, can not determine which one of the 2 zones is text zone, due to its non-supervised nature. We therefore need some extra effort to choose the text zone. There is no solution proposed in the original article. We propose 2 ideas to solve this problem: The first approach is to collect a set manually choosed text and non-text data (an average feature vector for each zone in each image) and then train a classifier with supervised learing approach. The second approach is to use geometrical and topological informations of each zone to determine text zones.
+This approach, while effective for seperatings text and non-text zones, can not determine which one of the 2 zones is text zone, due to its non-supervised nature. We therefore need some extra effort to choose the text zone. There is no solution proposed in the original article. We propose 2 ideas to solve this problem: The first approach is to collect a set of manually choosed text and non-text data (an average feature vector for each zone in each image) and then train a classifier with supervised learing approach. The second approach is to use geometrical and topological informations of each zone to determine text zones.
 
 \subsection{Text area identification}
 The result obtained by k-means algoritm needs to be polished to remove noise and other non text zone. We first use morphology operations “open” and “dilate” to fill up tiny holes and gaps and remove too small zones in the background. We can then apply some empirical rules to further remove zones which can not contain text. Each connected component of the refined text zones will then be boxed by a rectangle and returned as final results.
@@ -178,9 +178,9 @@ The result obtained by k-means algoritm needs to be polished to remove noise and
 \end{figure}
 
 \subsection{Connected components detection}
-The former method shows efficient results. However, it is still incapable to distinguish each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract characters.
+The former method shows efficient results. However, it is still incapable of distinguishing each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract characters.
 
-At first, we set the input image into a binary matrix according to a threshold. Knowing that all colors can be encoded into a grayscale double number between 0 and 255, we can transform our input image by set all pixels to 0 or 1 with their grayscale number by a threshold. Most of the time, pixels in a single letter have similar colors, so that in the binary matrix, these pixels have always the same value which will be considered as a same component.
+At first, we set the input image into a binary matrix according to a threshold. Knowing that all colors can be encoded into a grayscale double number between 0 and 255, we can transform our input image by setting all pixels to 0 or 1 with their grayscale number by a threshold. Most of the time, pixels in a single letter have similar colors, so that in the binary matrix, these pixels have always the same value which will be considered as a same component.
 
 The connected-component labeling algorithm is based on union-find method. The first pass of the algorithm propagate a pixel's label to its eight neighbors. Whenever the situation of connectivity arises, we attribute labels and union two set if it's neccesary. At the end of the first pass, each equivalence class has been completely determined and has a unique label, which is the root of its tree in the union-find structure. A second pass through the image then performs a translation, assigning to each pixel the label of its equivalence class.
 
@@ -210,13 +210,13 @@ What's more, as characters usually have regular forms, which is to say, the rati
 \vspace{-4ex}
 \caption{Components centering example}
 \label{fig:heatmap}
-\end{figure}
+\end{figure} 
 
 \section{Text recognition}
 \subsection{Neural network}
 After extract characters, we can move to the next step and try to recognize them.
 
-In machine learning, neural network is a powerful tool to estimate functions that maps input to output. Theoretically, it can approximate every non-linear functions when using non-linear activation function. 
+In machine learning, neural network is a powerful tool to estimate functions that maps input to output. Theoretically, it can approximate every non-linear functions when using a non-linear activation function. 
 
 Inspired of humans' central nervous systems, neural network uses connected nodes, known as neurons, to imitate the nervous system. A neural network is a complex adaptive system with ability to \textit{learn}. It consists of multiple layers. Apart from the input layer, all layers have an activation function. By adjusting this function according to our given datas, known as training set, the network achieve to learn and understand these datas. Here is the structure of the neural network:
 
@@ -230,12 +230,13 @@ Inspired of humans' central nervous systems, neural network uses connected nodes
 \label{fig:heatmap}
 \end{figure}
 
-Our goal is to determine the activation function $\Theta$ by using gradient decent. At first, we need to set $\Theta$ to some random values in order to break the symmetry. Then, the forward propagation will determine the output while the backpropagation will correct the error.
+Our goal is to determine the activation function $\Theta$ by using gradient descent. At first, we need to initialize $\Theta$ by some random values in order to break the symmetry. Then, the forward propagation will determine the output while the backpropagation will correct the error.
 
 In our project, we use neural network to learn digital numbers.
 
 \subsection{Pattern recognition}
-In essence, pattern recognition convers the problem:'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digit and letter images. Then we use the same neural network to predict new images.
+
+In essence, pattern recognition convers the following problem: 'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digital numbers' images. Then we use the same neural network to predict new digital numbers' images. 
 
 For digital number recognition, we use MNIST dataset where all digit images have been size-normalized and centered in a fixed size image of 28$\times$28 pixels. And for English letter recognition, we use the Chars74K dataset where each image has a size of 1200$\times$900 pixels. For simplify our task, we resize the size of those images to 40$\times$30. Therefore, each image of digit has 784 features and each image of letter has 1200 features.
 
@@ -256,9 +257,7 @@ Here are the text detection result with different photos:
 \end{figure}
 
 \subsection{Text recognition}
-We show you here some results with digit recognition.
-
-We use the MNIST database which consists of digits written by high school students and employees of the United States Census Bureau as our training data. The MNIST dataset consists of 70.000 handwritten digit immages of 0 to 9.
+We use the MNIST database which consists of digits written by high school students and employees of the United States Census Bureau as our training data. The MNIST dataset consists of 70.000 handwritten digit images of 0 to 9.
 
 We have tested the network with 10.000 different images and with different parameters of the network.
 
@@ -301,7 +300,7 @@ In order to better visualize the performance of the algorithm, we use here the c
 \label{fig:heatmap}
 \end{figure}
 
-Each color correspond with $log\frac{number\_of\_predicted\_i}{number\_actual\_ i}$, with this map, we can easily determine the error caused by the confusion of numbers. For exemple, the wrong predict of number 3 is always 5 and the wrong predict of number 4 is always 9. That is to say, the hand-writting of 4 is similary to the hand-writting of 9 and sometimes, it may lead to confusion to our system.
+Each color corresponds with $log\frac{number\_of\_predicted\_i}{number\_actual\_ i}$, with this map, we can easily determine the error caused by the confusion of numbers. For exemple, the wrong prediction of number 3 is always 5 and the wrong prediction of number 4 is always 9. That is to say, the hand-writting of 4 is similary to the hand-writting of 9 and sometimes, it may lead to confusion in our system.
 
 \subsection{Remaining difficulties and possible improvement}
 
