@@ -108,10 +108,21 @@ Our approach for text recognition is based on using neural network to classify c
 In order to extract text from an image, we first need to determine the location of text zone in order to later perform the extraction and the recognition.  
 \subsection{Detecton of contour}
 Since text is always composed of strokes (so that it can be written by men), edge turns out to be an excelent characteristic for text zone identification. We have adopted the approach proposed by Liu and al. for edge information extraction, that is by applying Sobel edge detector on the image for 4 directions (vertical, horizontal, up-right to down-left and up-left to down-right) with distance defined on the RGB color space to get 4 edge maps. And this 4 edge maps are to be used to determine the text locations.
-\subsection{K-means classification}
-With the 4 edge maps, we can then apply a sliding window to calculate the 6 different features as follows:
 
-(mean, variance, gravity center, entropy,...formules to be written in latex...)
+\subsection{K-means classification}
+With the 4 edge maps, we can then apply a sliding window of size $w \times h$ to calculate the 6 different features as follows:
+
+$\mu = \frac{1}{w \times h} \sum_{i=1}^{w} \sum_{j=1}^{h} E(i,j)$
+
+$\sigma =\sqrt{\frac{1}{w \times h} \sum_{i=1}^{w} \sum_{j=1}^{h} (E(i,j) - \mu)}$
+
+$Et = \sum_{i,j} E(i,j)\dot \log E(i,j) $
+
+$I = \sum_{i,j} (i-j)^2 E(i,j)$
+
+$H = \sum_{i,j} \frac{1}{1+(i-j)^2}E(i,j)$
+
+Where $E(i,j)$ is the value of pixel in i\textsuperscript{th} row, j\textsuperscript{th} column, here it is the grayscale color of each pixel. $\mu$ is the mean value in sliding window, $\sigma$ is their standard deviation, $ Et$ is their entropy, $ I$  is their gravity center and $ H$ is the expectation.
 
 With the 4 edge maps, we then get 24 features for a given position of the sliding window. And since there is no apparent cost function available, we need an unsupervised clustering algorithm to distinguish text zones from their surroundings. We apply therefore the k-means algorithm for this, as proposed in the paper of Liu and al..
 
@@ -119,6 +130,7 @@ This approach, while effective for seperatings text and non-text zones, can not 
 
 \subsection{Text area identification}
 The result obtained by k-means algoritm needs to be polished to remove noise and other non text zone. We first use morphology operations “open” and “dilate” to fill up tiny holes and gaps and remove too small zones in the background. We can then apply some empirical rules to further remove zones which can not contain text. Each connected component of the refined text zones will then be boxed by a rectangle and returned as final results.
+
 \subsection{Connected components detection}
 The former method shows efficient results. However, it is still incapable to distinguish each character which is important for text recognition. So we use at next step the connected connected components algorithm to extract every character.
 
