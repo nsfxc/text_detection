@@ -28,7 +28,7 @@
 
 
 \newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
-\onehalfspacing
+%\onehalfspacing
 \setcounter{tocdepth}{5}
 \setcounter{secnumdepth}{5}
 
@@ -263,7 +263,7 @@ In our project, we use neural network to learn digital numbers.
 
 In essence, pattern recognition convers the following problem: 'Given examples of signals and the correct decisions of them, make decisions automatically with future streams'. In our project, we use the neural network to learn a set of examples of digital numbers' images. Then we use the same neural network to predict new digital numbers' images. 
 
-For digital number recognition, we use MNIST dataset \cite{lecun1998gradient} where all digit images have been size-normalized and centered in a fixed size image of 28$\times$28 pixels. And for English letter recognition, we use the Chars74K dataset \cite{de2009character} where each letter image has a size of 1200$\times$900 pixels. For simplify our task, we resize the size of those images to 40$\times$30. Therefore, each image of digit has 784 features and each image of letter has 1200 features.
+For digital number recognition, we use MNIST dataset \cite{lecun1998gradient} where all digit images have been size-normalized and centered in a fixed size image of 28$\times$28 pixels. And for English letter recognition, we use the Chars74K dataset \cite{de2009character} where each letter image has a size of 1200$\times$900 pixels. For simplify our task, we resize the size of those images to 64$\times$64. Therefore, each image of digit has 784 features and each image of letter has 4096 features.
 
 Then we put all inputs into the neural network and using the trained neural network to recognize the extracted characters from the former step.
 
@@ -284,11 +284,11 @@ Here are the text detection result with different photos:
 
 \subsection{Text recognition} \mbox{} \vspace{-0.5cm}
 
-We show you in this subsection some results and analysis of digit recognition. The MNIST dataset consists of 70.000 handwritten digit images of 0 to 9. We have tested the network with 10.000 different images and with different parameters of the network.
+We show you in this subsection some results and analysis of digit and English letters recognition. We use the MNIST dataset which consists of 70.000 handwritten digit images of 0 to 9 to do digit recognition and the Chars74K dataset which contains 55 pictures of each capital letters, lower case letters and digits.
 
 \subsubsection{Influence of different parameters} \mbox{} \vspace{-0.5cm}
 
-Here are some results with different parameters:
+Here are some results of MNIST dataset training with different parameters:
 
 \begin{table}[h]
 \centering
@@ -317,12 +317,12 @@ We notice that we can get fairly good result by well choosing the parameters of 
 
 \subsubsection{Confusion matrix} \mbox{} \vspace{-0.5cm}
 
-In order to better visualize the performance of the algorithm, we use here the confusion matrix to see if the system is confusing two classes. Here is the heatmap of the confusion matrix:
+In order to better visualize the performance of the algorithm, we use here the confusion matrix to see if the system is confusing two classes. Here is the heatmap of the digit recognition confusion matrix:
 
 \begin{figure}[h]
 \vspace{-1ex}
 \begin{center}
-   \includegraphics[width=1.0\linewidth]{heatmap_log.png}
+   \includegraphics[width=1.0\linewidth]{Confusion_matrix_digital.png}
 \end{center}
 \vspace{-3ex}
 \caption{Heatmap of confusion matrix}
@@ -330,6 +330,20 @@ In order to better visualize the performance of the algorithm, we use here the c
 \end{figure}
 
 Each color corresponds with $log\frac{number\_of\_predicted\_i}{number\_actual\_ i}$, with this map, we can easily determine the error caused by the confusion of numbers. For exemple, the wrong prediction of number 3 is always 5 and the wrong prediction of number 4 is always 9. That is to say, the hand-writting of 4 is similary to the hand-writting of 9 and sometimes, it may lead to confusion in our system.
+
+And here is the confusion matrix of letter and digit recognition:
+
+\begin{figure}[h]
+\vspace{-1ex}
+\begin{center}
+   \includegraphics[width=1.0\linewidth]{Confusion_matrix_letter_digital.png}
+\end{center}
+\vspace{-3ex}
+\caption{Heatmap of confusion matrix}
+\label{fig:heatmap}
+\end{figure}
+
+The average accuracy for digit recognition can reach to 90\%, and the average accuracy for English letter and digit is about 70\%. However, if we consider the top three accuracy, that's to say, if we consider the 3 most similary letters or digits for a test image, the average accuracy can reach to 90\%.
 
 \subsection{Remaining difficulties and possible improvements} \mbox{} \vspace{-0.5cm}
 
