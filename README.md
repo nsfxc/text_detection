@@ -1,2 +1,3 @@
 # text_detection
-Projet 3A
+3rd year project
+A c++ project which can detect text area and recognize digital numbers and English letters.
